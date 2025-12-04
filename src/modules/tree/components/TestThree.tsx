@@ -88,7 +88,7 @@ const TestThree = () => {
 
 export default TestThree;
 
-const CoupleNode = ({ person, spouse }) => {
+const CoupleNode = ({ person, spouse }: { person?: any; spouse?: any }) => {
   return (
     <div className="flex items-center justify-between bg-white border border-gray-300 shadow-md rounded-xl px-3 py-2 w-[230px] cursor-pointer">
       {/* person */}
@@ -103,7 +103,13 @@ const CoupleNode = ({ person, spouse }) => {
   );
 };
 
-const PersonCard = ({ member, isSpouse }) => {
+const PersonCard = ({
+  member,
+  isSpouse,
+}: {
+  member?: any;
+  isSpouse?: Boolean;
+}) => {
   return (
     <div className={`flex flex-col items-center ${isSpouse && "bg-blue-200"}`}>
       <img
@@ -112,12 +118,12 @@ const PersonCard = ({ member, isSpouse }) => {
         }
         className="w-12 h-12 rounded-full object-cover border"
       />
-      <p className="text-xs mt-1 font-medium">{member.name}</p>
+      <p className="text-xs mt-1 font-medium">{member?.name}</p>
     </div>
   );
 };
 
-const SingleNode = ({ person }) => (
+const SingleNode = ({ person }: { person?: any }) => (
   <div className="bg-white border px-4 py-3 rounded-xl shadow-md flex flex-col items-center w-[120px]">
     <img
       src={
