@@ -4,7 +4,7 @@ import Tree from "react-d3-tree";
 //   department: "Production",
 // },
 
-const TestOne: any = () => {
+const TestOne = () => {
   const familyData = [
     {
       type: "couple",
@@ -57,7 +57,7 @@ const TestOne: any = () => {
 
 export default TestOne;
 
-const CustomNode = ({ nodeDatum }: { nodeDatum?: any }) => {
+const CustomNode = ({ nodeDatum }) => {
   if (nodeDatum.type === "couple") {
     return (
       <foreignObject width={220} height={100} x={-110} y={-50}>
@@ -95,7 +95,7 @@ const CustomNode = ({ nodeDatum }: { nodeDatum?: any }) => {
   );
 };
 
-const PersonCard = ({ member }: { member?: any }) => (
+const PersonCard = ({ member }) => (
   <div style={{ textAlign: "center" }}>
     <img
       src={

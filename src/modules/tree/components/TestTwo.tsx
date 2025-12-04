@@ -5,7 +5,7 @@ import Tree from "react-d3-tree";
 // },
 
 const TestTwo = () => {
-  const orgChart: any = {
+  const orgChart = {
     name: "Par Dada",
     children: [
       {
@@ -103,8 +103,7 @@ const TestTwo = () => {
 
 export default TestTwo;
 
-const CustomNodeOne = ({ nodeData }: { nodeData?: any }) => {
-  console.log("fff", nodeData);
+const CustomNodeOne = ({ nodeData }) => {
   return (
     <foreignObject width={150} height={80} x={-75} y={-40}>
       <div
