@@ -1,4 +1,5 @@
 import Tree from "react-d3-tree";
+import { myFamilyTree } from "../constants/constants";
 
 const TestThree = () => {
   const familyTree: any = {
@@ -58,7 +59,7 @@ const TestThree = () => {
   return (
     <div className="bg-green-200 h-lvh w-lvw" id="treeWrapper">
       <Tree
-        data={familyTree}
+        data={myFamilyTree}
         /////////////////////
         orientation="vertical"
         zoomable={true} // enable mousewheel zoom
