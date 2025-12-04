@@ -2,8 +2,8 @@ import Tree from "react-d3-tree";
 
 const TestThree = () => {
   const familyTree = {
-    name: "Families",
-    attributes: { type: "root" },
+    name: "Grandpa",
+    attributes: { type: "single", person: { id: "H1", name: "Grandpa" } },
     children: [
       {
         name: "Max",
@@ -18,7 +18,7 @@ const TestThree = () => {
             attributes: {
               type: "couple",
               person: { id: "H2", name: "John" },
-              spouse: { id: "W2", name: "Bella" },
+              spouse: { id: "W2", name: "Chloe" },
             },
             children: [],
           },
@@ -37,7 +37,7 @@ const TestThree = () => {
             attributes: {
               type: "couple",
               person: { id: "H2", name: "Jeff" },
-              spouse: { id: "W2", name: "Mella" },
+              spouse: { id: "W2", name: "Jackie" },
             },
             children: [],
           },
@@ -98,14 +98,14 @@ const CoupleNode = ({ person, spouse }) => {
       <div className="h-[2px] w-10 bg-gray-400 rounded-full"></div>
 
       {/* spouse */}
-      <PersonCard member={spouse} />
+      <PersonCard member={spouse} isSpouse />
     </div>
   );
 };
 
-const PersonCard = ({ member }) => {
+const PersonCard = ({ member, isSpouse }) => {
   return (
-    <div className="flex flex-col items-center">
+    <div className={`flex flex-col items-center ${isSpouse && "bg-blue-200"}`}>
       <img
         src={
           "https://media.istockphoto.com/id/1473780957/vector/default-avatar-profile-user-profile-icon-business-people-profile-picture-portrait-user.jpg?s=2048x2048&w=is&k=20&c=0WrcouAz2sHJscVO004qoRnNXLXDCFF18kje2Rl7nRA="
