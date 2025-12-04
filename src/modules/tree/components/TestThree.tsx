@@ -2,59 +2,59 @@ import Tree from "react-d3-tree";
 import { myFamilyTree } from "../constants/constants";
 
 const TestThree = () => {
-  const familyTree: any = {
-    name: "Grandpa",
-    attributes: { type: "single", person: { id: "H1", name: "Grandpa" } },
-    children: [
-      {
-        name: "Max",
-        attributes: {
-          type: "couple",
-          person: { id: "H1", name: "Max" },
-          spouse: { id: "W1", name: "Maxine" },
-        },
-        children: [
-          {
-            name: "John",
-            attributes: {
-              type: "couple",
-              person: { id: "H2", name: "John" },
-              spouse: { id: "W2", name: "Chloe" },
-            },
-            children: [],
-          },
-          {
-            name: "Chris",
-            attributes: {
-              type: "single",
-              person: { id: "P3", name: "Chris" },
-              //   husband: { id: "H2", name: "John" },
-              //   spouse: { id: "W2", name: "Bella" },
-            },
-            children: [],
-          },
-          {
-            name: "Jeff",
-            attributes: {
-              type: "couple",
-              person: { id: "H2", name: "Jeff" },
-              spouse: { id: "W2", name: "Jackie" },
-            },
-            children: [],
-          },
-        ],
-      },
+  // const familyTree: any = {
+  //   name: "Grandpa",
+  //   attributes: { type: "single", person: { id: "H1", name: "Grandpa" } },
+  //   children: [
+  //     {
+  //       name: "Max",
+  //       attributes: {
+  //         type: "couple",
+  //         person: { id: "H1", name: "Max" },
+  //         spouse: { id: "W1", name: "Maxine" },
+  //       },
+  //       children: [
+  //         {
+  //           name: "John",
+  //           attributes: {
+  //             type: "couple",
+  //             person: { id: "H2", name: "John" },
+  //             spouse: { id: "W2", name: "Chloe" },
+  //           },
+  //           children: [],
+  //         },
+  //         {
+  //           name: "Chris",
+  //           attributes: {
+  //             type: "single",
+  //             person: { id: "P3", name: "Chris" },
+  //             //   husband: { id: "H2", name: "John" },
+  //             //   spouse: { id: "W2", name: "Bella" },
+  //           },
+  //           children: [],
+  //         },
+  //         {
+  //           name: "Jeff",
+  //           attributes: {
+  //             type: "couple",
+  //             person: { id: "H2", name: "Jeff" },
+  //             spouse: { id: "W2", name: "Jackie" },
+  //           },
+  //           children: [],
+  //         },
+  //       ],
+  //     },
 
-      {
-        name: "Shawn",
-        attributes: {
-          type: "single",
-          person: { id: "P3", name: "Shawn" },
-        },
-        children: [],
-      },
-    ],
-  };
+  //     {
+  //       name: "Shawn",
+  //       attributes: {
+  //         type: "single",
+  //         person: { id: "P3", name: "Shawn" },
+  //       },
+  //       children: [],
+  //     },
+  //   ],
+  // };
 
   return (
     <div className="bg-green-200 h-lvh w-lvw" id="treeWrapper">
