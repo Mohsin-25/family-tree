@@ -1,7 +1,7 @@
 import Tree from "react-d3-tree";
 
 const TestThree = () => {
-  const familyTree = {
+  const familyTree: any = {
     name: "Grandpa",
     attributes: { type: "single", person: { id: "H1", name: "Grandpa" } },
     children: [
@@ -94,7 +94,7 @@ const TestThree = () => {
 
 export default TestThree;
 
-const CoupleNode = ({ person, spouse }) => {
+const CoupleNode = ({ person, spouse }: { person?: any; spouse?: any }) => {
   return (
     <div className="flex items-center justify-between bg-white border border-gray-300 shadow-md rounded-xl px-3 py-2 w-[300px] cursor-pointer">
       {/* person */}
@@ -109,7 +109,13 @@ const CoupleNode = ({ person, spouse }) => {
   );
 };
 
-const PersonCard = ({ member, isSpouse }) => {
+const PersonCard = ({
+  member,
+  isSpouse = false,
+}: {
+  member: any;
+  isSpouse?: any;
+}) => {
   return (
     <div className={`flex flex-col items-center ${isSpouse && "bg-blue-200"}`}>
       <img
@@ -123,7 +129,7 @@ const PersonCard = ({ member, isSpouse }) => {
   );
 };
 
-const SingleNode = ({ person }) => (
+const SingleNode = ({ person }: { person: any }) => (
   <div className="bg-white border px-4 py-3 rounded-xl shadow-md flex flex-col items-center w-[120px]">
     <img
       src={
