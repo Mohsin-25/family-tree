@@ -65,14 +65,20 @@ const TestThree = () => {
         draggable={true} // enable click+drag panning
         translate={{ x: 700, y: 100 }} // initial position
         zoom={0.75} // initial zoom level
-        nodeSize={{ x: 200, y: 200 }}
+        nodeSize={{ x: 200, y: 300 }}
         separation={{ siblings: 2, nonSiblings: 2 }}
+        pathFunc={"step"}
         /////////////////////
         renderCustomNodeElement={({ nodeDatum }) => {
           const { type, person, spouse } = nodeDatum.attributes || {};
 
           return (
-            <foreignObject width={250} height={120} x={-125} y={-60}>
+            <foreignObject
+              width={300}
+              height={120}
+              x={type === "couple" ? -125 : -60}
+              y={-60}
+            >
               {type === "couple" ? (
                 <CoupleNode person={person} spouse={spouse} />
               ) : (
@@ -90,7 +96,7 @@ export default TestThree;
 
 const CoupleNode = ({ person, spouse }) => {
   return (
-    <div className="flex items-center justify-between bg-white border border-gray-300 shadow-md rounded-xl px-3 py-2 w-[230px] cursor-pointer">
+    <div className="flex items-center justify-between bg-white border border-gray-300 shadow-md rounded-xl px-3 py-2 w-[300px] cursor-pointer">
       {/* person */}
       <PersonCard member={person} />
 
@@ -110,7 +116,7 @@ const PersonCard = ({ member, isSpouse }) => {
         src={
           "https://media.istockphoto.com/id/1473780957/vector/default-avatar-profile-user-profile-icon-business-people-profile-picture-portrait-user.jpg?s=2048x2048&w=is&k=20&c=0WrcouAz2sHJscVO004qoRnNXLXDCFF18kje2Rl7nRA="
         }
-        className="w-12 h-12 rounded-full object-cover border"
+        className="w-12 h-12 rounded-full object-cover border mx-3 my-2"
       />
       <p className="text-xs mt-1 font-medium">{member?.name}</p>
     </div>
