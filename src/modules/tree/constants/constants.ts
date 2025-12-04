@@ -1,4 +1,4 @@
-export const myFamilyTree = {
+export const myFamilyTree: any = {
   name: "ParDada",
   attributes: {
     type: "couple",
