@@ -5,7 +5,7 @@ import Tree from "react-d3-tree";
 // },
 
 const TestTwo = () => {
-  const orgChart = {
+  const orgChart: any = {
     name: "Par Dada",
     children: [
       {

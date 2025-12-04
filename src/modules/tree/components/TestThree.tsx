@@ -1,7 +1,7 @@
 import Tree from "react-d3-tree";
 
 const TestThree = () => {
-  const familyTree = {
+  const familyTree: any = {
     name: "Grandpa",
     attributes: { type: "single", person: { id: "H1", name: "Grandpa" } },
     children: [

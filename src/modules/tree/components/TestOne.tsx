@@ -4,7 +4,7 @@ import Tree from "react-d3-tree";
 //   department: "Production",
 // },
 
-const TestOne = () => {
+const TestOne: any = () => {
   const familyData = [
     {
       type: "couple",
