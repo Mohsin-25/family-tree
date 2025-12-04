@@ -57,7 +57,7 @@ const TestOne = () => {
 
 export default TestOne;
 
-const CustomNode = ({ nodeDatum }) => {
+const CustomNode = ({ nodeDatum }: { nodeDatum?: any }) => {
   if (nodeDatum.type === "couple") {
     return (
       <foreignObject width={220} height={100} x={-110} y={-50}>
@@ -95,7 +95,7 @@ const CustomNode = ({ nodeDatum }) => {
   );
 };
 
-const PersonCard = ({ member }) => (
+const PersonCard = ({ member }: { member?: any }) => (
   <div style={{ textAlign: "center" }}>
     <img
       src={

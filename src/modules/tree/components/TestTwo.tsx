@@ -103,7 +103,7 @@ const TestTwo = () => {
 
 export default TestTwo;
 
-const CustomNodeOne = ({ nodeData }) => {
+const CustomNodeOne = ({ nodeData }: { nodeData?: any }) => {
   console.log("fff", nodeData);
   return (
     <foreignObject width={150} height={80} x={-75} y={-40}>

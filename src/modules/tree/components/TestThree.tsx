@@ -68,7 +68,7 @@ const TestThree = () => {
         nodeSize={{ x: 200, y: 200 }}
         separation={{ siblings: 2, nonSiblings: 2 }}
         /////////////////////
-        renderCustomNodeElement={({ nodeDatum }) => {
+        renderCustomNodeElement={({ nodeDatum }: { nodeDatum?: any }) => {
           const { type, person, spouse } = nodeDatum.attributes || {};
 
           return (
