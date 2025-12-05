@@ -1,7 +1,7 @@
 import Tree from "react-d3-tree";
 import { myFamilyTree } from "../constants/constants";
 
-const TestThree = ({ setPopup, popup }) => {
+const TestThree = ({ setPopup, popup, setPopover }) => {
   // const familyTree: any = {
   //   name: "Grandpa",
   //   attributes: { type: "single", person: { id: "H1", name: "Grandpa" } },
@@ -86,6 +86,7 @@ const TestThree = ({ setPopup, popup }) => {
                   spouse={spouse}
                   setPopup={setPopup}
                   popup={popup}
+                  setPopover={setPopover}
                 />
               ) : (
                 <SingleNode person={person} setPopup={setPopup} popup={popup} />
@@ -105,16 +106,19 @@ const CoupleNode = ({
   spouse,
   setPopup,
   popup,
+  setPopover,
 }: {
   person?: any;
   spouse?: any;
   setPopup?: any;
   popup?: any;
+  setPopover?: any;
 }) => {
   return (
     <div
       className="flex items-center justify-between bg-white border border-gray-300 shadow-md rounded-xl px-3 py-2 w-[300px] cursor-pointer"
-      onClick={() => setPopup({ data: {}, state: true })}
+      onClick={() => setPopover(true)}
+      // onClick={() => setPopup({ data: {}, state: true })}
     >
       {/* person */}
       <PersonCard member={person} />

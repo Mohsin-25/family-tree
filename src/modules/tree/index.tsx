@@ -1,11 +1,11 @@
 import TestThree from "./components/TestThree";
 
-const FamilyTree = ({ setPopup, popup }) => {
+const FamilyTree = ({ setPopup, popup, setPopover }) => {
   return (
     <>
       {/* <TestOne /> */}
       {/* <TestTwo /> */}
-      <TestThree setPopup={setPopup} popup={popup} />
+      <TestThree setPopup={setPopup} popup={popup} setPopover={setPopover} />
     </>
   );
 };

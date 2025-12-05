@@ -4,7 +4,7 @@ const PopoverWrapper = ({ open, onOpenChange, children }) => {
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       {/* You MUST include PopoverContent or nothing will render */}
-      {open && <PopoverContent className="w-auto">{children}</PopoverContent>}
+      <PopoverContent className="w-auto">{children}</PopoverContent>
     </Popover>
   );
 };
