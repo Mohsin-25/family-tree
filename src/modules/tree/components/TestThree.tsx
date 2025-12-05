@@ -1,7 +1,7 @@
 import Tree from "react-d3-tree";
 import { myFamilyTree } from "../constants/constants";
 
-const TestThree = () => {
+const TestThree = ({ setPopup, popup }) => {
   // const familyTree: any = {
   //   name: "Grandpa",
   //   attributes: { type: "single", person: { id: "H1", name: "Grandpa" } },
@@ -81,9 +81,14 @@ const TestThree = () => {
               y={-60}
             >
               {type === "couple" ? (
-                <CoupleNode person={person} spouse={spouse} />
+                <CoupleNode
+                  person={person}
+                  spouse={spouse}
+                  setPopup={setPopup}
+                  popup={popup}
+                />
               ) : (
-                <SingleNode person={person} />
+                <SingleNode person={person} setPopup={setPopup} popup={popup} />
               )}
             </foreignObject>
           );
@@ -95,9 +100,22 @@ const TestThree = () => {
 
 export default TestThree;
 
-const CoupleNode = ({ person, spouse }: { person?: any; spouse?: any }) => {
+const CoupleNode = ({
+  person,
+  spouse,
+  setPopup,
+  popup,
+}: {
+  person?: any;
+  spouse?: any;
+  setPopup?: any;
+  popup?: any;
+}) => {
   return (
-    <div className="flex items-center justify-between bg-white border border-gray-300 shadow-md rounded-xl px-3 py-2 w-[300px] cursor-pointer">
+    <div
+      className="flex items-center justify-between bg-white border border-gray-300 shadow-md rounded-xl px-3 py-2 w-[300px] cursor-pointer"
+      onClick={() => setPopup({ data: {}, state: true })}
+    >
       {/* person */}
       <PersonCard member={person} />
 
@@ -130,8 +148,20 @@ const PersonCard = ({
   );
 };
 
-const SingleNode = ({ person }: { person: any }) => (
-  <div className="bg-white border px-4 py-3 rounded-xl shadow-md flex flex-col items-center w-[120px]">
+const SingleNode = ({
+  person,
+  setPopup,
+  popup,
+}: {
+  person: any;
+  setPopup?: any;
+  popup?: any;
+}) => (
+  <div
+    className="bg-white border px-4 py-3 rounded-xl shadow-md flex flex-col items-center w-[120px]"
+    // onClick={() => setPopup({ data: {}, state: true })}
+    // onDoubleClick={}
+  >
     <img
       src={
         "https://media.istockphoto.com/id/1473780957/vector/default-avatar-profile-user-profile-icon-business-people-profile-picture-portrait-user.jpg?s=2048x2048&w=is&k=20&c=0WrcouAz2sHJscVO004qoRnNXLXDCFF18kje2Rl7nRA="

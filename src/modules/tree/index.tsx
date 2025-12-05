@@ -1,11 +1,11 @@
 import TestThree from "./components/TestThree";
 
-const FamilyTree = () => {
+const FamilyTree = ({ setPopup, popup }) => {
   return (
     <>
       {/* <TestOne /> */}
       {/* <TestTwo /> */}
-      <TestThree />
+      <TestThree setPopup={setPopup} popup={popup} />
     </>
   );
 };
