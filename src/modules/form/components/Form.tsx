@@ -10,10 +10,11 @@ import {
   SelectValue,
 } from "../../../components/ui/select";
 
-export function Form() {
+export function Form({ popup }: { popup?: any }) {
+  // console.log("rrr", popup);
   return (
     <Card className="w-full bg-white p-5 gap-3">
-      <p>Add Member</p>
+      <p>Add Member For {popup?.data?.person?.name}</p>
 
       <hr className="text-gray-300" />
       <div>

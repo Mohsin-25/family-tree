@@ -16,8 +16,9 @@ function App() {
         open={popup?.state}
         onOpenChange={() => setPopup({ data: {}, state: false })}
       >
-        <Form />
+        <Form popup={popup} />
       </PopupWrapper>
+
       <PopoverWrapper open={popover} onOpenChange={() => setPopover(false)}>
         <div>
           <ul>

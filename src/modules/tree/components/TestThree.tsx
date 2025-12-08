@@ -1,7 +1,15 @@
 import Tree from "react-d3-tree";
 import { myFamilyTree } from "../constants/constants";
 
-const TestThree = ({ setPopup, popup, setPopover }) => {
+const TestThree = ({
+  setPopup,
+  popup,
+  setPopover,
+}: {
+  setPopup?: any;
+  popup?: any;
+  setPopover?: any;
+}) => {
   // const familyTree: any = {
   //   name: "Grandpa",
   //   attributes: { type: "single", person: { id: "H1", name: "Grandpa" } },
@@ -57,7 +65,7 @@ const TestThree = ({ setPopup, popup, setPopover }) => {
   // };
 
   return (
-    <div className="bg-green-200 h-lvh w-lvw" id="treeWrapper">
+    <div className="bg-black/70 h-lvh w-lvw" id="">
       <Tree
         data={myFamilyTree}
         /////////////////////
@@ -65,10 +73,12 @@ const TestThree = ({ setPopup, popup, setPopover }) => {
         zoomable={true} // enable mousewheel zoom
         draggable={true} // enable click+drag panning
         translate={{ x: 700, y: 100 }} // initial position
-        zoom={0.75} // initial zoom level
+        zoom={0.5} // initial zoom level
         nodeSize={{ x: 200, y: 300 }}
+        onNodeClick={() => alert("yeet")}
         separation={{ siblings: 2, nonSiblings: 2 }}
         pathFunc={"step"}
+        onLinkClick={() => alert("yeet")}
         /////////////////////
         renderCustomNodeElement={({ nodeDatum }) => {
           const { type, person, spouse } = nodeDatum.attributes || {};
@@ -76,12 +86,13 @@ const TestThree = ({ setPopup, popup, setPopover }) => {
           return (
             <foreignObject
               width={300}
-              height={120}
-              x={type === "couple" ? -125 : -60}
+              height={150}
+              x={type === "couple" ? -150 : -60}
               y={-60}
             >
               {type === "couple" ? (
                 <CoupleNode
+                  allData={nodeDatum.attributes}
                   person={person}
                   spouse={spouse}
                   setPopup={setPopup}
@@ -89,7 +100,12 @@ const TestThree = ({ setPopup, popup, setPopover }) => {
                   setPopover={setPopover}
                 />
               ) : (
-                <SingleNode person={person} setPopup={setPopup} popup={popup} />
+                <SingleNode
+                  allData={nodeDatum.attributes}
+                  person={person}
+                  setPopup={setPopup}
+                  popup={popup}
+                />
               )}
             </foreignObject>
           );
@@ -102,12 +118,14 @@ const TestThree = ({ setPopup, popup, setPopover }) => {
 export default TestThree;
 
 const CoupleNode = ({
+  allData,
   person,
   spouse,
   setPopup,
   popup,
   setPopover,
 }: {
+  allData?: any;
   person?: any;
   spouse?: any;
   setPopup?: any;
@@ -116,54 +134,44 @@ const CoupleNode = ({
 }) => {
   return (
     <div
-      className="flex items-center justify-between bg-white border border-gray-300 shadow-md rounded-xl px-3 py-2 w-[300px] cursor-pointer"
-      onClick={() => setPopover(true)}
+      className="flex items-center justify-between rounded-xl cursor-pointer"
+      // onClick={() => setPopover(true)}
       // onClick={() => setPopup({ data: {}, state: true })}
     >
       {/* person */}
-      <PersonCard member={person} />
+      <SingleNode allData={allData} person={person} setPopup={setPopup} />
 
-      {/* Link bar */}
-      <div className="h-[2px] w-10 bg-gray-400 rounded-full"></div>
+      <div className="h-0.5 w-13 mt-6 bg-black/50 rounded-full"></div>
 
       {/* spouse */}
-      <PersonCard member={spouse} isSpouse />
-    </div>
-  );
-};
-
-const PersonCard = ({
-  member,
-  isSpouse = false,
-}: {
-  member: any;
-  isSpouse?: any;
-}) => {
-  return (
-    <div className={`flex flex-col items-center ${isSpouse && "bg-blue-200"}`}>
-      <img
-        src={
-          "https://media.istockphoto.com/id/1473780957/vector/default-avatar-profile-user-profile-icon-business-people-profile-picture-portrait-user.jpg?s=2048x2048&w=is&k=20&c=0WrcouAz2sHJscVO004qoRnNXLXDCFF18kje2Rl7nRA="
-        }
-        className="w-12 h-12 rounded-full object-cover border mx-3 my-2"
+      <SingleNode
+        allData={allData}
+        person={spouse}
+        setPopup={setPopup}
+        isSpouse
       />
-      <p className="text-xs mt-1 font-medium">{member?.name}</p>
     </div>
   );
 };
 
 const SingleNode = ({
+  allData,
   person,
+  isSpouse = false,
   setPopup,
   popup,
 }: {
+  allData: any;
   person: any;
+  isSpouse?: any;
   setPopup?: any;
   popup?: any;
 }) => (
   <div
-    className="bg-white border px-4 py-3 rounded-xl shadow-md flex flex-col items-center w-[120px]"
-    // onClick={() => setPopup({ data: {}, state: true })}
+    className={`bg-white border px-4 py-3 rounded-xl shadow-md flex flex-col items-center w-[120px] ${
+      isSpouse && "bg-blue-100!"
+    }`}
+    onClick={() => setPopup({ data: allData, state: true })}
     // onDoubleClick={}
   >
     <img
