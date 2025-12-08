@@ -122,9 +122,9 @@ const CoupleNode = ({
   person,
   spouse,
   setPopup,
-  popup,
-  setPopover,
-}: {
+}: // popup,
+// setPopover,
+{
   allData?: any;
   person?: any;
   spouse?: any;
@@ -159,8 +159,8 @@ const SingleNode = ({
   person,
   isSpouse = false,
   setPopup,
-  popup,
-}: {
+}: // popup,
+{
   allData: any;
   person: any;
   isSpouse?: any;
