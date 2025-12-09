@@ -3,9 +3,9 @@ import { myFamilyTree } from "../constants/constants";
 
 const TestThree = ({
   setPopup,
-  popup,
-  setPopover,
-}: {
+}: // popup,
+// setPopover,
+{
   setPopup?: any;
   popup?: any;
   setPopover?: any;
@@ -68,6 +68,7 @@ const TestThree = ({
     <div className="bg-yellow-100 h-lvh w-lvw" id="">
       <Tree
         data={myFamilyTree}
+        collapsible={true}
         /////////////////////
         orientation="vertical"
         zoomable={true} // enable mousewheel zoom
@@ -80,7 +81,7 @@ const TestThree = ({
         pathFunc={"step"}
         onLinkClick={() => alert("yeet")}
         /////////////////////
-        renderCustomNodeElement={({ nodeDatum }) => {
+        renderCustomNodeElement={({ nodeDatum, toggleNode }) => {
           const { type, person, spouse } = nodeDatum.attributes || {};
 
           return (
@@ -90,23 +91,24 @@ const TestThree = ({
               x={type === "couple" ? -150 : -60}
               y={-60}
             >
-              {type === "couple" ? (
-                <CoupleNode
-                  allData={nodeDatum.attributes}
-                  person={person}
-                  spouse={spouse}
-                  setPopup={setPopup}
-                  popup={popup}
-                  setPopover={setPopover}
-                />
-              ) : (
-                <SingleNode
-                  allData={nodeDatum.attributes}
-                  person={person}
-                  setPopup={setPopup}
-                  popup={popup}
-                />
-              )}
+              <div onClick={toggleNode}>
+                {" "}
+                {/* ✅ THIS enables collapse */}
+                {type === "couple" ? (
+                  <CoupleNode
+                    allData={nodeDatum.attributes}
+                    person={person}
+                    spouse={spouse}
+                    setPopup={setPopup}
+                  />
+                ) : (
+                  <SingleNode
+                    allData={nodeDatum.attributes}
+                    person={person}
+                    setPopup={setPopup}
+                  />
+                )}
+              </div>
             </foreignObject>
           );
         }}
@@ -168,12 +170,19 @@ const SingleNode = ({
   popup?: any;
 }) => (
   <div
-    className={`bg-white border px-4 py-3 rounded-xl shadow-md flex flex-col items-center w-[120px] ${
+    className={`relative bg-white border px-4 py-3 rounded-xl shadow-md flex flex-col items-center w-[120px] ${
       isSpouse && "bg-blue-100!"
     }`}
-    onClick={() => setPopup({ data: allData, state: true })}
-    // onDoubleClick={}
   >
+    <button
+      className="bg-red-500 w-5 h-5 text-white flex items-center justify-center rounded ml-18"
+      onClick={(e) => {
+        e.stopPropagation();
+        setPopup({ data: allData, state: true });
+      }}
+    >
+      +
+    </button>
     <img
       src={
         "https://media.istockphoto.com/id/1473780957/vector/default-avatar-profile-user-profile-icon-business-people-profile-picture-portrait-user.jpg?s=2048x2048&w=is&k=20&c=0WrcouAz2sHJscVO004qoRnNXLXDCFF18kje2Rl7nRA="

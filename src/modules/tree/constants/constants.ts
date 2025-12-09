@@ -354,3 +354,171 @@ export const myFamilyTree: any = {
     },
   ],
 };
+
+export const newFamilyTree: any = {
+  id: 1,
+  name: "John",
+  attributes: {
+    type: "couple",
+    person: { id: 101, name: "John" },
+    spouse: { id: 201, name: "Nicky" },
+  },
+  children: [
+    {
+      id: 2,
+      name: "Bob",
+      attributes: {
+        type: "couple",
+        person: { id: 102, name: "Bob" },
+        spouse: { id: 202, name: "Alice" },
+      },
+      children: [
+        {
+          id: 3,
+          name: "Sam",
+          attributes: {
+            type: "single",
+            person: { id: 103, name: "Sam" },
+          },
+          children: [],
+        },
+        {
+          id: 4,
+          name: "Lily",
+          attributes: {
+            type: "couple",
+            person: { id: 203, name: "Lily" },
+            spouse: { id: 104, name: "Mark" },
+          },
+          children: [
+            {
+              id: 5,
+              name: "Chris",
+              attributes: {
+                type: "single",
+                person: { id: 105, name: "Chris" },
+              },
+              children: [],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 6,
+      name: "Skylar",
+      attributes: {
+        type: "couple",
+        person: { id: 204, name: "Skylar" },
+        spouse: { id: 106, name: "Jake" },
+      },
+      children: [
+        {
+          id: 7,
+          name: "Mia",
+          attributes: {
+            type: "single",
+            person: { id: 205, name: "Mia" },
+          },
+          children: [],
+        },
+        {
+          id: 8,
+          name: "Noah",
+          attributes: {
+            type: "couple",
+            person: { id: 107, name: "Noah" },
+            spouse: { id: 206, name: "Emma" },
+          },
+          children: [
+            {
+              id: 9,
+              name: "Oliver",
+              attributes: {
+                type: "single",
+                person: { id: 108, name: "Oliver" },
+              },
+              children: [],
+            },
+            {
+              id: 10,
+              name: "Ava",
+              attributes: {
+                type: "single",
+                person: { id: 207, name: "Ava" },
+              },
+              children: [],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 11,
+      name: "Ethan",
+      attributes: {
+        type: "single",
+        person: { id: 109, name: "Ethan" },
+      },
+      children: [],
+    },
+  ],
+};
+
+export const fam = {
+  id: 1,
+  name: "John Carter",
+  dob: "1980-05-14",
+  profession: "Civil Engineer",
+  maritalStatus: "Married",
+
+  spouse: {
+    id: 2,
+    name: "Nicky Carter",
+    dob: "1983-09-21",
+    profession: "Interior Designer",
+    maritalStatus: "Married",
+  },
+
+  children: [
+    {
+      id: 3,
+      name: "Bob Carter",
+      dob: "2005-03-12",
+      profession: "Student",
+      maritalStatus: "Single",
+
+      spouse: null,
+
+      children: [
+        {
+          id: 4,
+          name: "Sam Carter",
+          dob: "2028-06-01",
+          profession: "Kid",
+          maritalStatus: "Single",
+          spouse: null,
+          children: [],
+        },
+      ],
+    },
+    {
+      id: 5,
+      name: "Skylar Carter",
+      dob: "2008-11-25",
+      profession: "College Student",
+      maritalStatus: "Single",
+      spouse: null,
+      children: [],
+    },
+    {
+      id: 6,
+      name: "Ethan Carter",
+      dob: "2012-01-09",
+      profession: "School Student",
+      maritalStatus: "Single",
+      spouse: null,
+      children: [],
+    },
+  ],
+};
