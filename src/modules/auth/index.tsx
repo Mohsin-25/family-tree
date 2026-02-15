@@ -11,11 +11,16 @@ const AuthPage = () => {
       <img
         src={Background}
         alt="tree branches background"
-        className="absolute top-0 right-0 -z-1"
+        className="absolute top-0 right-0 -z-1 
+        "
+        // bg-gray-300
+        // bg-[#EFD28D]
+        // bg-[#62ABAC]
+        // bg-[#D4AFB9]
       />
       <div className="relative h-[500px] w-[800px] rounded-xl overflow-hidden border backdrop-filter backdrop-blur-sm bg-opacity-10">
         <Separator isLogin={isLogin} setIsLogin={setIsLogin} />
-        {isLogin ? <Login /> : <Signin />}
+        {isLogin ? <Login /> : <Signin setIsLogin={setIsLogin} />}
       </div>
     </div>
   );
