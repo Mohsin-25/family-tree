@@ -32,12 +32,12 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 function Button({
   className,
-  variant,
+  variant = "default",
   size,
   asChild = false,
   ...props

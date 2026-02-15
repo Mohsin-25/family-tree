@@ -1,4 +1,37 @@
+import { useState } from "react";
+import PopupWrapper from "../form/components/PopupWrapper";
+import { Form } from "../form/components/Form";
+import PopoverWrapper from "../form/components/PopoverWrapper";
 import TestThree from "./components/TestThree";
+
+const MyTree = () => {
+  const [popup, setPopup] = useState({ data: {}, state: false });
+  const [popover, setPopover] = useState(false);
+  return (
+    <div>
+      <FamilyTree setPopup={setPopup} popup={popup} setPopover={setPopover} />
+
+      <PopupWrapper
+        open={popup?.state}
+        onOpenChange={() => setPopup({ data: {}, state: false })}
+      >
+        <Form popup={popup} />
+      </PopupWrapper>
+
+      <PopoverWrapper open={popover} onOpenChange={() => setPopover(false)}>
+        <div>
+          <ul>
+            <li>a</li>
+            <li>b</li>
+            <li>c</li>
+          </ul>
+        </div>
+      </PopoverWrapper>
+    </div>
+  );
+};
+
+export default MyTree;
 
 const FamilyTree = ({
   setPopup,
@@ -19,5 +52,4 @@ const FamilyTree = ({
   );
 };
 
-export default FamilyTree;
 //
