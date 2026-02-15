@@ -4,9 +4,9 @@ import AuthPage from "../modules/auth";
 export const Route = createFileRoute("/signIn")({
   component: RouteComponent,
   beforeLoad: () => {
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("token");
     if (token) {
-      throw redirect({ to: "/" });
+      throw redirect({ to: "/myTree" });
     }
   },
 });
