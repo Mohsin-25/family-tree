@@ -13,7 +13,7 @@ export const useGetLoggedin = () => {
     onSuccess: (res) => {
       if (res.token) {
         localStorage.setItem("token", res.token);
-        window.location.href = "/myTree";
+        window.location.href = "/dashboard";
         // showSuccessToast("", res);
       } else {
         reset();
