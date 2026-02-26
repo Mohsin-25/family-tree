@@ -8,106 +8,106 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignInRouteImport } from './routes/signIn'
-import { Route as MyTreeRouteImport } from './routes/myTree'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as SignInRouteImport } from "./routes/signIn";
+import { Route as DashboardRouteImport } from "./routes/dashboard";
+import { Route as IndexRouteImport } from "./routes/index";
+import { Route as MyTreeIdRouteImport } from "./routes/myTree/$id";
 
 const SignInRoute = SignInRouteImport.update({
-  id: '/signIn',
-  path: '/signIn',
+  id: "/signIn",
+  path: "/signIn",
   getParentRoute: () => rootRouteImport,
-} as any)
-const MyTreeRoute = MyTreeRouteImport.update({
-  id: '/myTree',
-  path: '/myTree',
-  getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+  id: "/dashboard",
+  path: "/dashboard",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
+const MyTreeIdRoute = MyTreeIdRouteImport.update({
+  id: "/myTree/$id",
+  path: "/myTree/$id",
+  getParentRoute: () => rootRouteImport,
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/myTree': typeof MyTreeRoute
-  '/signIn': typeof SignInRoute
+  "/": typeof IndexRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/signIn": typeof SignInRoute;
+  "/myTree/$id": typeof MyTreeIdRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/myTree': typeof MyTreeRoute
-  '/signIn': typeof SignInRoute
+  "/": typeof IndexRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/signIn": typeof SignInRoute;
+  "/myTree/$id": typeof MyTreeIdRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/myTree': typeof MyTreeRoute
-  '/signIn': typeof SignInRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexRoute;
+  "/dashboard": typeof DashboardRoute;
+  "/signIn": typeof SignInRoute;
+  "/myTree/$id": typeof MyTreeIdRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/myTree' | '/signIn'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/myTree' | '/signIn'
-  id: '__root__' | '/' | '/dashboard' | '/myTree' | '/signIn'
-  fileRoutesById: FileRoutesById
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths: "/" | "/dashboard" | "/signIn" | "/myTree/$id";
+  fileRoutesByTo: FileRoutesByTo;
+  to: "/" | "/dashboard" | "/signIn" | "/myTree/$id";
+  id: "__root__" | "/" | "/dashboard" | "/signIn" | "/myTree/$id";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
-  MyTreeRoute: typeof MyTreeRoute
-  SignInRoute: typeof SignInRoute
+  IndexRoute: typeof IndexRoute;
+  DashboardRoute: typeof DashboardRoute;
+  SignInRoute: typeof SignInRoute;
+  MyTreeIdRoute: typeof MyTreeIdRoute;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/signIn': {
-      id: '/signIn'
-      path: '/signIn'
-      fullPath: '/signIn'
-      preLoaderRoute: typeof SignInRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/myTree': {
-      id: '/myTree'
-      path: '/myTree'
-      fullPath: '/myTree'
-      preLoaderRoute: typeof MyTreeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+    "/signIn": {
+      id: "/signIn";
+      path: "/signIn";
+      fullPath: "/signIn";
+      preLoaderRoute: typeof SignInRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/dashboard": {
+      id: "/dashboard";
+      path: "/dashboard";
+      fullPath: "/dashboard";
+      preLoaderRoute: typeof DashboardRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/myTree/$id": {
+      id: "/myTree/$id";
+      path: "/myTree/$id";
+      fullPath: "/myTree/$id";
+      preLoaderRoute: typeof MyTreeIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
-  MyTreeRoute: MyTreeRoute,
   SignInRoute: SignInRoute,
-}
+  MyTreeIdRoute: MyTreeIdRoute,
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();

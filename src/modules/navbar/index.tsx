@@ -1,10 +1,15 @@
+import { useNavigate } from "@tanstack/react-router";
 import { Power, TreePalm } from "lucide-react";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <div className="flex justify-between border border-b-extraLightGray p-5">
       <div className="flex gap-2 items-center justify-center">
-        <span className="bg-primary size-10 flex items-center justify-center rounded-full">
+        <span
+          className="bg-primary size-10 flex items-center justify-center rounded-full cursor-pointer"
+          onClick={() => navigate({ to: "/dashboard" })}
+        >
           <TreePalm className="text-white" />
         </span>
         <div className="flex flex-col text-sm">

@@ -29,11 +29,11 @@ api.interceptors.response.use(
   },
   function (error) {
     return Promise.reject(error);
-  }
+  },
 );
 
 api.interceptors.request.use((req) => {
-  const token = localStorage.getItem("accessToken");
+  const token = localStorage.getItem("token");
   req.headers["Authorization"] = `Bearer ${token}`;
   return req;
 });

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import MyTree from "../modules/tree";
+import MyTree from "../../modules/tree";
 
-export const Route = createFileRoute("/myTree")({
+export const Route = createFileRoute("/myTree/$id")({
   component: RouteComponent,
 });
 
