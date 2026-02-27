@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { httpMethods, httpRequest } from "../../../api/httpRequest";
 
-export const getFamilyTree = () => {
+export const getFamilyTree = (id: any) => {
   const { data, isFetching } = useQuery({
-    queryKey: ["tree"],
+    queryKey: ["tree", id],
     queryFn: () => {
-      return httpRequest({ url: "persons/tree", method: httpMethods.get });
+      return httpRequest({ url: `/trees/${id}`, method: httpMethods.get });
     },
   });
   return {
-    data,
+    treeData: data,
     isFetching,
   };
 };
