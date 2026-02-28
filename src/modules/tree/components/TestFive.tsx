@@ -185,7 +185,7 @@ const TestFive = ({
   const structuredData = getStructuredPerson(getPersonById(rootPersonId));
 
   return (
-    <div className="bg-background h-lvh w-lvw" id="">
+    <div className="bg-background-100 h-[calc(100vh-65px)] " id="">
       <Tree
         data={structuredData}
         collapsible={true}
