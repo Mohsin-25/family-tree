@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PopupWrapper from "../form/components/PopupWrapper";
 import { Form } from "../form/components/Form";
-import TestFive from "./components/TestFive";
+import TestSix from "./components/TestSix";
 import { Plus, UserRoundCheck, UserX } from "lucide-react";
 import { useParams } from "@tanstack/react-router";
 import { getFamilyTree } from "./services/service";
@@ -28,7 +28,7 @@ export default MyTree;
 const FamilyTree = ({ setPopup, popup }: { setPopup?: any; popup?: any }) => {
   return (
     <>
-      <TestFive setPopup={setPopup} popup={popup} />
+      <TestSix setPopup={setPopup} popup={popup} />
 
       <PopupWrapper
         open={popup?.state}
