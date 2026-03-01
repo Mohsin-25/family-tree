@@ -255,11 +255,7 @@ const CoupleNode = ({
   setPopover?: any;
 }) => {
   return (
-    <div
-      className="flex items-center justify-between rounded-xl cursor-pointer"
-      // onClick={() => setPopover(true)}
-      // onClick={() => setPopup({ data: {}, state: true })}
-    >
+    <div className="flex items-center justify-between rounded-xl cursor-pointer">
       {/* person */}
       <SingleNode allData={allData} person={person} setPopup={setPopup} />
 
@@ -298,7 +294,7 @@ const SingleNode = ({
       className="bg-red-500 w-5 h-5 text-white flex items-center justify-center rounded ml-18"
       onClick={(e) => {
         e.stopPropagation();
-        setPopup({ data: allData, state: true });
+        setPopup({ data: person, state: true });
       }}
     >
       +

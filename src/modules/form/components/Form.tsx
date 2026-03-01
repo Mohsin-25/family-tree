@@ -1,23 +1,50 @@
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { useParams } from "@tanstack/react-router";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
+import { Dropdown } from "../../../components/ui/Dropdown";
 import { Input } from "../../../components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../components/ui/select";
-import { useCreatePerson } from "../../tree/services/service";
-import { useParams } from "@tanstack/react-router";
+import { useCreatePerson, useUpdatePerson } from "../../tree/services/service";
+dayjs.extend(customParseFormat);
+
+type PersonFormValues = {
+  name: string;
+  gender: "M" | "F";
+  dob: string;
+  maritalStatus: "S" | "M";
+  profession: string;
+};
 
 export function Form({ popup, setPopup }: { popup?: any; setPopup?: any }) {
-  const methods = useForm();
-  const { id } = useParams({ from: "/myTree/$id" });
+  const methods = useForm<PersonFormValues>({
+    defaultValues: {
+      name: "",
+      gender: undefined,
+      dob: "",
+      maritalStatus: undefined,
+      profession: "",
+    },
+  });
 
-  const { mutate, isPending } = useCreatePerson({ setPopup, treeId: id });
+  const { id } = useParams({ from: "/myTree/$id" });
+  const { mutate: createPersonMutate, isPending: isCreatePersonPending } =
+    useCreatePerson({
+      setPopup,
+      treeId: id,
+    });
+
+  const memberIdToBeUpdated = popup?.data?.id;
+  const memberDataToPrefill = popup?.data?.data || {};
+
+  const { mutate: updatePersonMutate, isPending: isUpdatePersonPending } =
+    useUpdatePerson({
+      setPopup,
+      treeId: id,
+      personId: memberIdToBeUpdated,
+    });
 
   const onSubmit = () => {
     const data = methods.getValues();
@@ -28,9 +55,24 @@ export function Form({ popup, setPopup }: { popup?: any; setPopup?: any }) {
       maritalStatus: data?.maritalStatus,
       profession: data?.profession,
     };
-
-    mutate(payload);
+    if (memberIdToBeUpdated) {
+      updatePersonMutate(payload);
+    } else {
+      createPersonMutate(payload);
+    }
   };
+
+  useEffect(() => {
+    if (memberIdToBeUpdated) {
+      methods.reset({
+        name: memberDataToPrefill?.name,
+        gender: memberDataToPrefill?.gender || null,
+        dob: memberDataToPrefill?.dob,
+        maritalStatus: memberDataToPrefill?.maritalStatus || null,
+        profession: memberDataToPrefill?.profession,
+      });
+    }
+  }, [memberIdToBeUpdated]);
 
   return (
     <FormProvider {...methods}>
@@ -42,7 +84,9 @@ export function Form({ popup, setPopup }: { popup?: any; setPopup?: any }) {
           <div>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <label htmlFor="name">Name</label>
+                <label className="w-fit" htmlFor="name">
+                  Name
+                </label>
                 <Input
                   id="name"
                   type="text"
@@ -54,30 +98,24 @@ export function Form({ popup, setPopup }: { popup?: any; setPopup?: any }) {
               </div>
               <div className="flex gap-4 w-full">
                 <div className="grid gap-2 flex-1/3">
-                  <label htmlFor="gender">Gender</label>
-                  <Controller
-                    control={methods.control}
+                  <label className="w-fit" htmlFor="gender">
+                    Gender
+                  </label>
+                  <Dropdown
                     name="gender"
-                    render={({ field }) => (
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-auto">
-                          <SelectValue placeholder="Select" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="female">Female</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    )}
+                    control={methods.control}
+                    placeholder="Select"
+                    className="w-auto"
+                    options={[
+                      { label: "Male", value: "M" },
+                      { label: "Female", value: "F" },
+                    ]}
                   />
                 </div>
                 <div className="grid gap-2 flex-1/3">
-                  <label htmlFor="dob">DOB</label>
+                  <label className="w-fit" htmlFor="dob">
+                    DOB
+                  </label>
                   <Input
                     id="dob"
                     type="date"
@@ -87,31 +125,25 @@ export function Form({ popup, setPopup }: { popup?: any; setPopup?: any }) {
                   />
                 </div>
                 <div className="grid gap-2 flex-1/3">
-                  <label htmlFor="maritalStatus">Marital Status</label>
-                  <Controller
-                    control={methods.control}
+                  <label className="w-fit" htmlFor="maritalStatus">
+                    Marital Status
+                  </label>
+                  <Dropdown
                     name="maritalStatus"
-                    render={({ field }) => (
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-auto">
-                          <SelectValue placeholder="Select" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectItem value="single">Single</SelectItem>
-                            <SelectItem value="married">Married</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    )}
+                    control={methods.control}
+                    placeholder="Select"
+                    className="w-auto"
+                    options={[
+                      { label: "Single", value: "S" },
+                      { label: "Married", value: "M" },
+                    ]}
                   />
                 </div>
               </div>
               <div className="grid gap-2">
-                <label htmlFor="profession">Profession</label>
+                <label className="w-fit" htmlFor="profession">
+                  Profession
+                </label>
                 <Input
                   id="profession"
                   type="text"
@@ -129,7 +161,7 @@ export function Form({ popup, setPopup }: { popup?: any; setPopup?: any }) {
               variant="secondary"
               className="w-full"
               type="submit"
-              disabled={isPending}
+              disabled={isCreatePersonPending || isUpdatePersonPending}
             >
               Submit
             </Button>
