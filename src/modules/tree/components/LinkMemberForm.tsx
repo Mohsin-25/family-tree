@@ -52,7 +52,7 @@ const LinkMemberForm = ({
     { label: "Father", value: "1" },
     { label: "Mother", value: "2" },
     { label: "Spouse", value: "3" },
-    { label: "Childers", value: "4" },
+    { label: "Children", value: "4" },
   ];
 
   return (
