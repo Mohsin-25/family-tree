@@ -69,9 +69,9 @@ const TestSix = ({
         getPersonById(item)?.gender === "F" && !getPersonById(item)?.father,
     );
 
-  const structuredData: FamilyNode | undefined = rootPersonId
+  const structuredData: FamilyNode | any = rootPersonId
     ? getStructuredPerson(getPersonById(rootPersonId))
-    : undefined;
+    : {};
 
   return (
     <div className="bg-background-100 h-[calc(100vh-65px)] " id="">
