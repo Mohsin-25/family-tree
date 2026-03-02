@@ -183,7 +183,7 @@ const SingleNode = ({
       className="size-8 text-primary/60 hover:text-primary hidden group-hover:flex items-center justify-center rounded-full absolute right-1 top-1 cursor-pointer"
       onClick={(e) => {
         e.stopPropagation();
-        setPopup({ data: person, state: true });
+        setPopup({ data: person, state: true, form: "editMember" });
       }}
     >
       <Edit />

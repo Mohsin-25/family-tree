@@ -83,3 +83,33 @@ export const useUpdatePerson = ({
 
   return { mutate, isPending };
 };
+
+export const useLinkPerson = ({
+  setPopup,
+  treeId,
+  personId,
+}: {
+  setPopup?: any;
+  treeId?: any;
+  personId?: any;
+}) => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: (payload: { relativeId: String; relationId: Number }) =>
+      httpRequest({
+        url: `/trees/${treeId}/persons/${personId}`,
+        method: httpMethods.post,
+        payload,
+      }),
+    onSuccess: (res) => {
+      if (res) {
+        setPopup({ data: {}, state: false });
+        queryClient.invalidateQueries({
+          queryKey: ["tree"],
+        });
+      }
+    },
+  });
+
+  return { mutate, isPending };
+};

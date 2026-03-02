@@ -7,7 +7,7 @@ import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
 import { Dropdown } from "../../../components/ui/Dropdown";
 import { Input } from "../../../components/ui/input";
-import { useCreatePerson, useUpdatePerson } from "../../tree/services/service";
+import { useCreatePerson, useUpdatePerson } from "../services/service";
 dayjs.extend(customParseFormat);
 
 type PersonFormValues = {
@@ -18,7 +18,13 @@ type PersonFormValues = {
   profession: string;
 };
 
-export function Form({ popup, setPopup }: { popup?: any; setPopup?: any }) {
+export function AddMemberForm({
+  popup,
+  setPopup,
+}: {
+  popup?: any;
+  setPopup?: any;
+}) {
   const methods = useForm<PersonFormValues>({
     defaultValues: {
       name: "",
@@ -78,7 +84,11 @@ export function Form({ popup, setPopup }: { popup?: any; setPopup?: any }) {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <Card className="w-full bg-white p-5 gap-3">
-          <p>Add New Member {popup?.data?.person?.name}</p>
+          {popup?.form === "editMember" ? (
+            <p>Edit {popup?.data?.data?.name}</p>
+          ) : (
+            <p>Add New Member</p>
+          )}
 
           <hr className="text-gray-300" />
           <div>
