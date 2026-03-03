@@ -37,3 +37,23 @@ export const useCreateTree = ({ setPopup }: { setPopup?: any }) => {
 
   return { mutate, isPending };
 };
+
+export const useDeleteTree = ({ treeId }: { treeId?: any }) => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: () =>
+      httpRequest({
+        url: `/trees/${treeId}/deleteTree`,
+        method: httpMethods.delete,
+      }),
+    onSuccess: (res) => {
+      if (res) {
+        queryClient.invalidateQueries({
+          queryKey: ["userTrees"],
+        });
+      }
+    },
+  });
+
+  return { mutate, isPending };
+};

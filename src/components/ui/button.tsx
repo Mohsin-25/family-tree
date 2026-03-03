@@ -42,6 +42,7 @@ function Button({
   size,
   asChild = false,
   loading = false,
+  replaceWithSpinner = false,
   children,
   disabled,
   ...props
@@ -49,6 +50,7 @@ function Button({
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
     loading?: boolean;
+    replaceWithSpinner?: boolean;
   }) {
   const Comp = asChild ? Slot : "button";
 
@@ -63,8 +65,18 @@ function Button({
       disabled={loading || disabled}
       {...props}
     >
-      {children}
-      {loading && <Spinner size="2" />}
+      {loading ? (
+        replaceWithSpinner ? (
+          <Spinner size="2" />
+        ) : (
+          <>
+            {children}
+            <Spinner size="2" />
+          </>
+        )
+      ) : (
+        children
+      )}
     </Comp>
   );
 }

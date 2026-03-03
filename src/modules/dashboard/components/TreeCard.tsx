@@ -1,15 +1,18 @@
 import { useNavigate } from "@tanstack/react-router";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { CalendarDays, Plus, Trees, Users } from "lucide-react";
+import { CalendarDays, Plus, Trash, Trees, Users } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../../../components/ui/button";
 import PopupWrapper from "../../form/components/PopupWrapper";
 import { CreateTreeForm } from "./CreateTreeForm";
+import { useDeleteTree } from "../services/service";
 dayjs.extend(relativeTime);
 
 const TreeCard = ({ item }: { item: any }) => {
   const navigate = useNavigate();
+
+  const { mutate, isPending } = useDeleteTree({ treeId: item?.treeId });
 
   return (
     <div className="bg-white flex flex-col overflow-hidden w-[280px] min-h-[380px] border border-extraLightGray rounded-lg shadow-lg group">
@@ -28,14 +31,14 @@ const TreeCard = ({ item }: { item: any }) => {
       </div>
       <div className="p-4 flex flex-col gap-4">
         <span className="text-sm">{item?.description}</span>
-        <div className="flex gap-8">
-          <span className="flex gap-3 items-center">
+        <div className="flex justify-between">
+          <span className="flex gap-2 items-center">
             <Users size={16} className="text-muted-foreground" />
             <span className="text-sm text-muted-foreground">
               {item?.memberCount} members
             </span>
           </span>
-          <span className="flex gap-3 items-center">
+          <span className="flex gap-2 items-center">
             <Trees size={16} className="text-muted-foreground" />
             <span className="text-sm text-muted-foreground">
               {item?.generations || 5} generations
@@ -43,7 +46,7 @@ const TreeCard = ({ item }: { item: any }) => {
           </span>
         </div>
         <div className="flex">
-          <span className="flex gap-3 items-center">
+          <span className="flex gap-2 items-center">
             <CalendarDays size={16} className="text-muted-foreground" />
             <span className="text-sm text-muted-foreground">
               Updated {dayjs(item?.updatedAt).fromNow()}
@@ -51,14 +54,25 @@ const TreeCard = ({ item }: { item: any }) => {
           </span>
         </div>
       </div>
-      <div className="p-4 pt-0 mt-auto">
+      <div className="flex gap-4 p-4 pt-0 mt-auto">
         <Button
-          className="w-full"
+          variant={"secondary"}
+          className="flex-1"
           onClick={() =>
             navigate({ to: "/myTree/$id", params: { id: item?.treeId } })
           }
         >
           View Tree
+        </Button>
+        <Button
+          variant={"outline"}
+          loading={isPending}
+          replaceWithSpinner
+          onClick={() => mutate()}
+          className="text-red-500"
+          title="Delete tree"
+        >
+          <Trash />
         </Button>
       </div>
     </div>
@@ -72,16 +86,18 @@ export const EmptyTreeCard = () => {
   return (
     <>
       <div
-        className="bg-white/50 flex flex-col gap-2 w-[280px] min-h-[380px] border border-dashed border-black/50 rounded-lg shadow-lg items-center justify-center hover:border-black/70 cursor-pointer hover:bg-card/15"
+        className="p-5 flex flex-col gap-5 w-[280px] min-h-[380px] border border-dashed border-black/50 rounded-lg shadow-lg items-center justify-center hover:border-black/70 cursor-pointer hover:bg-white"
         onClick={() => setPopup(true)}
       >
         <span className="bg-black/10 rounded-full p-4">
           <Plus size={30} className="text-muted-foreground" />
         </span>
-        <span className="text-xl font-semibold">Create New Tree</span>
-        <span className="text-center text-sm text-muted-foreground">
-          Start documenting a new family lineage
-        </span>
+        <div className="flex flex-col text-center">
+          <span className="text-md font-semibold">Create New Tree</span>
+          <span className="text-center text-sm text-muted-foreground">
+            Start documenting a new family lineage
+          </span>
+        </div>
       </div>
       <PopupWrapper open={popup} onOpenChange={() => setPopup(false)}>
         <CreateTreeForm setPopup={setPopup} />
