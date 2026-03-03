@@ -70,7 +70,7 @@ const LoginForm = ({
             <Button
               type="submit"
               variant="secondary"
-              disabled={isPending || isSigninPending}
+              loading={isPending || isSigninPending}
               onClick={() => {}}
             >
               Submit

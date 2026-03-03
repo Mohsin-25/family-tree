@@ -1,3 +1,4 @@
+import { Theme } from "@radix-ui/themes";
 import { Dialog, DialogContent } from "../../../components/ui/dialog";
 
 const PopupWrapper = ({
@@ -12,7 +13,9 @@ const PopupWrapper = ({
   return (
     <div className="">
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="p-0 border-none">{children}</DialogContent>
+        <DialogContent className="p-0 border-none">
+          <Theme>{children}</Theme>
+        </DialogContent>
       </Dialog>
     </div>
   );

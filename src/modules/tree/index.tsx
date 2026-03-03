@@ -91,12 +91,14 @@ const MemberCountStatus = ({
             >
               {treeData?.connectedPeople?.map((item: any, index: any) => {
                 return (
-                  <Menubar.Item
-                    key={index}
-                    className="flex items-center gap-2 text-sm text-secondary bg-secondary/5 rounded-md border border-secondary px-2 py-1"
-                  >
-                    <span>{item?.name}</span>
-                  </Menubar.Item>
+                  <div className="bg-white rounded-md">
+                    <Menubar.Item
+                      key={index}
+                      className="flex items-center gap-2 text-sm text-secondary bg-secondary/5 rounded-md border border-secondary px-2 py-1"
+                    >
+                      <span>{item?.name}</span>
+                    </Menubar.Item>
+                  </div>
                 );
               })}
             </Menubar.Content>
@@ -124,26 +126,28 @@ const MemberCountStatus = ({
             >
               {treeData?.disConnectedPeople?.map((item: any, index: any) => {
                 return (
-                  <Menubar.Item
-                    key={index}
-                    className="flex justify-between items-center gap-2 text-sm bg-red-700/5 text-red-700 rounded-md border border-red-700 px-2 py-1"
-                  >
-                    <span>{item?.name}</span>
-                    <span
-                      title="Link with tree"
-                      className="cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setPopup({
-                          data: item,
-                          state: true,
-                          form: "linkMember",
-                        });
-                      }}
+                  <div className="bg-white rounded-md">
+                    <Menubar.Item
+                      key={index}
+                      className="flex justify-between items-center gap-2 text-sm bg-red-700/5 text-red-700 rounded-md border border-red-700 px-2 py-1"
                     >
-                      <Link size={18} />
-                    </span>
-                  </Menubar.Item>
+                      <span>{item?.name}</span>
+                      <span
+                        title="Link with tree"
+                        className="cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setPopup({
+                            data: item,
+                            state: true,
+                            form: "linkMember",
+                          });
+                        }}
+                      >
+                        <Link size={18} />
+                      </span>
+                    </Menubar.Item>
+                  </div>
                 );
               })}
             </Menubar.Content>

@@ -98,7 +98,7 @@ const LinkMemberForm = ({
               variant="secondary"
               className="w-full"
               type="submit"
-              disabled={isLinkPersonPending}
+              loading={isLinkPersonPending}
             >
               Submit
             </Button>

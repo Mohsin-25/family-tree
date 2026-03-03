@@ -17,8 +17,10 @@ function RootComponent() {
 
   return (
     <React.Fragment>
-      <Navbar />
-      <Outlet />
+      <div className="bg-background h-screen">
+        <Navbar />
+        <Outlet />
+      </div>
     </React.Fragment>
   );
 }

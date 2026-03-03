@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { httpMethods, httpRequest } from "../../../api/httpRequest";
 
 export const getFamilyTree = (id: any) => {
-  const { data, isFetching } = useQuery({
+  const { data, isFetching, isLoading } = useQuery({
     queryKey: ["tree", id],
     queryFn: () => {
       return httpRequest({ url: `/trees/${id}`, method: httpMethods.get });
@@ -11,6 +11,7 @@ export const getFamilyTree = (id: any) => {
   return {
     treeData: data,
     isFetching,
+    isLoading,
   };
 };
 

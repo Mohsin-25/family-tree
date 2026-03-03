@@ -54,13 +54,12 @@ export function CreateTreeForm({ setPopup }: { setPopup?: any }) {
               </div>
             </div>
           </div>
-          <hr className="mb-2 mt-4 text-gray-300" />
-          <div className="flex-col gap-2">
+          <div className="flex-col gap-2 mt-6">
             <Button
-              variant="outline"
-              className="w-full bg-gray-200"
+              variant="secondary"
+              className="w-full"
               type="submit"
-              disabled={isPending}
+              loading={isPending}
             >
               Submit
             </Button>

@@ -171,7 +171,7 @@ export function AddMemberForm({
               variant="secondary"
               className="w-full"
               type="submit"
-              disabled={isCreatePersonPending || isUpdatePersonPending}
+              loading={isCreatePersonPending || isUpdatePersonPending}
             >
               Submit
             </Button>

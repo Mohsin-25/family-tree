@@ -12,7 +12,7 @@ const TreeCard = ({ item }: { item: any }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col overflow-hidden w-[280px] min-h-[380px] border border-extraLightGray rounded-lg shadow-lg group">
+    <div className="bg-white flex flex-col overflow-hidden w-[280px] min-h-[380px] border border-extraLightGray rounded-lg shadow-lg group">
       <div className="flex flex-col relative">
         <img
           src={
@@ -72,7 +72,7 @@ export const EmptyTreeCard = () => {
   return (
     <>
       <div
-        className="flex flex-col gap-2 w-[280px] min-h-[380px] border border-dashed border-black/50 rounded-lg shadow-lg items-center justify-center hover:border-black/70 cursor-pointer hover:bg-card/15"
+        className="bg-white/50 flex flex-col gap-2 w-[280px] min-h-[380px] border border-dashed border-black/50 rounded-lg shadow-lg items-center justify-center hover:border-black/70 cursor-pointer hover:bg-card/15"
         onClick={() => setPopup(true)}
       >
         <span className="bg-black/10 rounded-full p-4">
