@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import AuthPage from "../modules/auth";
+import NewAuth from "../modules/newAuth";
 
 export const Route = createFileRoute("/signIn")({
   component: RouteComponent,
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/signIn")({
 function RouteComponent() {
   return (
     <div>
-      <AuthPage />
+      <NewAuth />
     </div>
   );
 }
