@@ -114,3 +114,23 @@ export const useLinkPerson = ({
 
   return { mutate, isPending };
 };
+
+export const useMarkAsRootPerson = () => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: (payload: { treeId: String; personId: String }) =>
+      httpRequest({
+        url: `/trees/${payload?.treeId}/set-root/${payload?.personId}`,
+        method: httpMethods.post,
+      }),
+    onSuccess: (res) => {
+      if (res) {
+        queryClient.invalidateQueries({
+          queryKey: ["tree"],
+        });
+      }
+    },
+  });
+
+  return { mutate, isPending };
+};

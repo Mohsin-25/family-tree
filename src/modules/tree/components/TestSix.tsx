@@ -59,15 +59,15 @@ const TestSix = ({
     };
   };
 
-  const rootPersonId =
-    treeData?.meta?.rootMemberIds?.find(
-      (item: any) =>
-        getPersonById(item)?.gender === "M" && !getPersonById(item)?.father,
-    ) ||
-    treeData?.meta?.rootMemberIds?.find(
-      (item: any) =>
-        getPersonById(item)?.gender === "F" && !getPersonById(item)?.father,
-    );
+  const rootPersonId = treeData?.meta?.rootMemberIds?.[0];
+  //  treeData?.meta?.rootMemberIds?.find(
+  //     (item: any) =>
+  //       getPersonById(item)?.gender === "M" && !getPersonById(item)?.father,
+  //   ) ||
+  //   treeData?.meta?.rootMemberIds?.find(
+  //     (item: any) =>
+  //       getPersonById(item)?.gender === "F" && !getPersonById(item)?.father,
+  //   );
 
   const structuredData: FamilyNode | any = rootPersonId
     ? getStructuredPerson(getPersonById(rootPersonId))

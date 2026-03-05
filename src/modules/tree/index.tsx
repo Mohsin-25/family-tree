@@ -1,12 +1,13 @@
 import * as Menubar from "@radix-ui/react-menubar";
 import { useParams } from "@tanstack/react-router";
-import { Link, Plus, UserRoundCheck, UserX } from "lucide-react";
+import { Crown, Link, Plus, UserRoundCheck, UserX } from "lucide-react";
 import { useState } from "react";
 import { AddMemberForm } from "./components/AddMemberForm";
 import PopupWrapper from "../form/components/PopupWrapper";
 import TestSix from "./components/TestSix";
-import { getFamilyTree } from "./services/service";
+import { getFamilyTree, useMarkAsRootPerson } from "./services/service";
 import LinkMemberForm from "./components/LinkMemberForm";
+import { Spinner, Theme } from "@radix-ui/themes";
 
 const MyTree = () => {
   const [popup, setPopup] = useState({ data: {}, state: false, form: "" });
@@ -67,6 +68,11 @@ const MemberCountStatus = ({
   treeData: any;
   setPopup: any;
 }) => {
+  const {
+    mutate: markAsRootPersonMutation,
+    isPending: isMarkAsRootPersonPending,
+  } = useMarkAsRootPerson();
+
   return (
     <Menubar.Root className="flex">
       <div className="flex flex-col fixed top-20 left-5 p-1 text-sm gap-2">
@@ -90,14 +96,49 @@ const MemberCountStatus = ({
               sideOffset={10}
             >
               {treeData?.connectedPeople?.map((item: any, index: any) => {
+                const rootMember = treeData?.meta?.rootMemberIds?.[0];
                 return (
                   <div className="bg-white rounded-md">
-                    <Menubar.Item
-                      key={index}
-                      className="flex items-center gap-2 text-sm text-secondary bg-secondary/5 rounded-md border border-secondary px-2 py-1"
-                    >
-                      <span>{item?.name}</span>
-                    </Menubar.Item>
+                    <Theme>
+                      <Menubar.Item
+                        key={index}
+                        className="flex group items-center justify-between gap-2 text-sm text-secondary bg-secondary/5 rounded-md border border-secondary px-2 py-1"
+                        onClick={(e) => {
+                          e.preventDefault();
+                        }}
+                      >
+                        <span>{item?.name}</span>
+                        {rootMember == item?._id &&
+                          (isMarkAsRootPersonPending ? (
+                            <Spinner loading />
+                          ) : (
+                            <span>
+                              <Crown size={16} className="mr-0.5" />
+                            </span>
+                          ))}
+                        {rootMember != item?._id && (
+                          <span
+                            className="hidden group-hover:block cursor-pointer"
+                            title="Mark as Root Member"
+                            onClick={() => {
+                              markAsRootPersonMutation({
+                                treeId: item?.treeId,
+                                personId: item?._id,
+                              });
+                            }}
+                          >
+                            {isMarkAsRootPersonPending ? (
+                              <Spinner loading />
+                            ) : (
+                              <Crown
+                                size={20}
+                                className="bg-primary text-white rounded-full p-1"
+                              />
+                            )}
+                          </span>
+                        )}
+                      </Menubar.Item>
+                    </Theme>
                   </div>
                 );
               })}
@@ -130,6 +171,9 @@ const MemberCountStatus = ({
                     <Menubar.Item
                       key={index}
                       className="flex justify-between items-center gap-2 text-sm bg-red-700/5 text-red-700 rounded-md border border-red-700 px-2 py-1"
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
                     >
                       <span>{item?.name}</span>
                       <span
