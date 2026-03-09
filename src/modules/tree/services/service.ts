@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { httpMethods, httpRequest } from "../../../api/httpRequest";
+import { useAppToast } from "../../../components/Toast";
 
 export const getFamilyTree = (id: any) => {
   const { data, isFetching, isLoading } = useQuery({
@@ -8,8 +9,9 @@ export const getFamilyTree = (id: any) => {
       return httpRequest({ url: `/trees/${id}`, method: httpMethods.get });
     },
   });
+
   return {
-    treeData: data,
+    treeData: data?.data,
     isFetching,
     isLoading,
   };
@@ -23,6 +25,8 @@ export const useCreatePerson = ({
   treeId?: any;
 }) => {
   const queryClient = useQueryClient();
+  const { showToast } = useAppToast();
+
   const { mutate, isPending } = useMutation({
     mutationFn: (payload: {
       name: string;
@@ -37,10 +41,23 @@ export const useCreatePerson = ({
         payload,
       }),
     onSuccess: (res) => {
-      if (res?._id) {
+      showToast({
+        description: res?.message,
+        status: res?.status,
+      });
+
+      if (res?.status && res?.data?._id) {
         setPopup({ data: {}, state: false });
         queryClient.invalidateQueries({
           queryKey: ["tree"],
+        });
+      }
+    },
+    onError: (err: any) => {
+      if (err?.message) {
+        showToast({
+          description: err?.message,
+          status: err?.status,
         });
       }
     },
@@ -59,6 +76,8 @@ export const useUpdatePerson = ({
   personId?: any;
 }) => {
   const queryClient = useQueryClient();
+  const { showToast } = useAppToast();
+
   const { mutate, isPending } = useMutation({
     mutationFn: (payload: {
       name: string;
@@ -73,10 +92,23 @@ export const useUpdatePerson = ({
         payload,
       }),
     onSuccess: (res) => {
-      if (res?._id) {
+      showToast({
+        description: res?.message,
+        status: res?.status,
+      });
+
+      if (res?.status && res?.data?._id) {
         setPopup({ data: {}, state: false });
         queryClient.invalidateQueries({
           queryKey: ["tree"],
+        });
+      }
+    },
+    onError: (err: any) => {
+      if (err?.message) {
+        showToast({
+          description: err?.message,
+          status: err?.status,
         });
       }
     },
@@ -95,6 +127,8 @@ export const useLinkPerson = ({
   personId?: any;
 }) => {
   const queryClient = useQueryClient();
+  const { showToast } = useAppToast();
+
   const { mutate, isPending } = useMutation({
     mutationFn: (payload: { relativeId: String; relationId: Number }) =>
       httpRequest({
@@ -103,10 +137,23 @@ export const useLinkPerson = ({
         payload,
       }),
     onSuccess: (res) => {
-      if (res) {
+      showToast({
+        description: res?.message,
+        status: res?.status,
+      });
+
+      if (res?.status) {
         setPopup({ data: {}, state: false });
         queryClient.invalidateQueries({
           queryKey: ["tree"],
+        });
+      }
+    },
+    onError: (err: any) => {
+      if (err?.message) {
+        showToast({
+          description: err?.message,
+          status: err?.status,
         });
       }
     },
@@ -117,6 +164,8 @@ export const useLinkPerson = ({
 
 export const useMarkAsRootPerson = () => {
   const queryClient = useQueryClient();
+  const { showToast } = useAppToast();
+
   const { mutate, isPending } = useMutation({
     mutationFn: (payload: { treeId: String; personId: String }) =>
       httpRequest({
@@ -124,9 +173,22 @@ export const useMarkAsRootPerson = () => {
         method: httpMethods.post,
       }),
     onSuccess: (res) => {
-      if (res) {
+      showToast({
+        description: res?.message,
+        status: res?.status,
+      });
+
+      if (res?.status) {
         queryClient.invalidateQueries({
           queryKey: ["tree"],
+        });
+      }
+    },
+    onError: (err: any) => {
+      if (err?.message) {
+        showToast({
+          description: err?.message,
+          status: err?.status,
         });
       }
     },
