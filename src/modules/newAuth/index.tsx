@@ -46,7 +46,7 @@ const NewAuth = () => {
                 </span>
               </div>
             )}
-            <NewLoginForm isLogin={isLogin} />
+            <NewLoginForm isLogin={isLogin} setIsLogin={setIsLogin} />
 
             {isLogin ? (
               <div className="text-center text-sm">

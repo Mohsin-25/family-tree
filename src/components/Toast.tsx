@@ -7,7 +7,7 @@ type ToastState = {
   open: boolean;
   title?: string;
   description?: string;
-  type?: ToastType;
+  status?: ToastType;
 };
 
 const ToastContext = React.createContext<{
@@ -27,6 +27,9 @@ export const AppToastProvider = ({
     setToast({ ...data, open: true });
   };
 
+  const toastTitle =
+    toast.title || (toast.status && "Success") || (!toast.status && "Failure");
+
   return (
     <ToastContext.Provider value={{ showToast }}>
       <Toast.Provider swipeDirection="right">
@@ -38,14 +41,24 @@ export const AppToastProvider = ({
           duration={3000}
           className={`flex flex-col gap-1 rounded-md p-4 shadow-lg transition-all
   ${
-    toast.type === "success"
+    toast.status
       ? "bg-green-50 border border-green-400"
-      : toast.type === "error"
+      : !toast.status
         ? "bg-red-50 border border-red-400"
         : "bg-white border"
   }`}
         >
-          <Toast.Title className="font-semibold">{toast.title}</Toast.Title>
+          <Toast.Title
+            className={`font-semibold ${
+              toast.status
+                ? "text-green-400"
+                : !toast.status
+                  ? "text-red-400"
+                  : ""
+            }`}
+          >
+            {toastTitle}
+          </Toast.Title>
 
           {toast.description && (
             <Toast.Description className="text-sm opacity-80">

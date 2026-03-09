@@ -1,7 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { httpMethods, httpRequest } from "../../../../api/httpRequest";
+import { useAppToast } from "../../../../components/Toast";
 
 export const useGetLoggedin = () => {
+  const { showToast } = useAppToast();
   const { mutate, isPending, reset } = useMutation({
     mutationFn: (payload: { userName: string; password: string }) => {
       return httpRequest({
@@ -11,20 +13,27 @@ export const useGetLoggedin = () => {
       });
     },
     onSuccess: (res) => {
-      if (res.token) {
-        localStorage.setItem("token", res.token);
-        window.location.href = "/dashboard";
-        // showSuccessToast("", res);
+      reset();
+      showToast({
+        description: res?.message,
+        status: res?.status,
+      });
+      if (res?.data?.token) {
+        setTimeout(() => {
+          localStorage.setItem("token", res?.data?.token);
+          window.location.href = "/dashboard";
+        }, 1500);
       } else {
         reset();
       }
     },
     onError: (err: any) => {
-      console.log("fff err", err);
-
       reset();
-      if (err?.response.data.message) {
-        // showErrorToast("Failure", err?.response?.data?.message);
+      if (err?.message) {
+        showToast({
+          description: err?.message,
+          status: err?.status,
+        });
       }
     },
   });

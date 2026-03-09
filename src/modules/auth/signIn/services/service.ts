@@ -1,7 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { httpMethods, httpRequest } from "../../../../api/httpRequest";
+import { useAppToast } from "../../../../components/Toast";
 
 export const useGetSignin = ({ setIsLogin }: { setIsLogin?: any }) => {
+  const { showToast } = useAppToast();
   const { mutate, isPending, reset } = useMutation({
     mutationFn: (payload: { userName: string; password: string }) => {
       return httpRequest({
@@ -11,22 +13,24 @@ export const useGetSignin = ({ setIsLogin }: { setIsLogin?: any }) => {
       });
     },
     onSuccess: (res) => {
-      console.log("fff res", res);
-
       reset();
-      if (res?.userName) {
+      showToast({
+        description: res?.message,
+        status: res?.status,
+      });
+      if (res?.status) {
         setIsLogin(true);
-        // showSuccessToast("", res);
       } else {
         reset();
       }
     },
     onError: (err: any) => {
-      console.log("fff err", err);
-
       reset();
-      if (err?.response.data.message) {
-        // showErrorToast("Failure", err?.response?.data?.message);
+      if (err?.message) {
+        showToast({
+          description: err?.message,
+          status: err?.status,
+        });
       }
     },
   });

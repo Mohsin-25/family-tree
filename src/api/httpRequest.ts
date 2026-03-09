@@ -24,11 +24,16 @@ const api = axios.create({
 });
 
 api.interceptors.response.use(
-  function (response) {
-    return response;
-  },
-  function (error) {
-    return Promise.reject(error);
+  (response) => response,
+  (error) => {
+    const data = error?.response?.data;
+
+    return Promise.reject({
+      status: data?.status ?? false,
+      statusCode: data?.statusCode ?? error?.response?.status,
+      message: data?.message ?? error?.message ?? "Something went wrong",
+      errors: data?.errors ?? [],
+    });
   },
 );
 
