@@ -2,6 +2,8 @@ import { useParams } from "@tanstack/react-router";
 import { Edit } from "lucide-react";
 import Tree, { type RawNodeDatum } from "react-d3-tree";
 import { getFamilyTree } from "../services/service";
+import men from "../../../assets/user-vector-men.jpg";
+import women from "../../../assets/user-vector-women.jpg";
 
 type FamilyNode = RawNodeDatum & {
   type: "single" | "couple";
@@ -95,13 +97,11 @@ const TestSix = ({
           const { type, person, spouse } = customNode;
 
           return (
-            <foreignObject
-              width={300}
-              height={150}
-              x={type === "couple" ? -150 : -60}
-              y={-60}
-            >
-              <div onClick={toggleNode}>
+            <foreignObject width={500} height={300} x={-250} y={-90}>
+              <div
+                onClick={toggleNode}
+                className="flex items-center justify-center"
+              >
                 {" "}
                 {/* ✅ THIS enables collapse */}
                 {type === "couple" ? (
@@ -149,7 +149,7 @@ const CoupleNode = ({
       {/* person */}
       <SingleNode allData={allData} person={person} setPopup={setPopup} />
 
-      <div className="h-0.5 w-13 mt-0 bg-black/50 rounded-full"></div>
+      <div className="h-0.5 w-[100px] mt-0 bg-black/50 rounded-full"></div>
 
       {/* spouse */}
       <SingleNode
@@ -175,24 +175,25 @@ const SingleNode = ({
   popup?: any;
 }) => (
   <div
-    className={`relative bg-white group border px-4 py-6 rounded-xl shadow-md flex flex-col items-center w-[140px] cursor-auto ${
+    className={`relative bg-white group border px-4 py-6 rounded-xl shadow-md flex flex-col items-center justify-center w-[200px] h-[180px] cursor-auto ${
       isSpouse && "bg-blue-100!"
     }`}
   >
     <button
-      className="size-8 text-primary/60 hover:text-primary hidden group-hover:flex items-center justify-center rounded-full absolute right-1 top-1 cursor-pointer"
+      className="text-primary/60 hover:text-primary hidden group-hover:flex items-center justify-center rounded-full absolute right-2 top-2 cursor-pointer"
       onClick={(e) => {
         e.stopPropagation();
         setPopup({ data: person, state: true, form: "editMember" });
       }}
     >
-      <Edit />
+      <Edit size={32} />
     </button>
     <img
-      src={
-        "https://media.istockphoto.com/id/1473780957/vector/default-avatar-profile-user-profile-icon-business-people-profile-picture-portrait-user.jpg?s=2048x2048&w=is&k=20&c=0WrcouAz2sHJscVO004qoRnNXLXDCFF18kje2Rl7nRA="
-      }
-      className="w-12 h-12 rounded-full object-cover mb-1"
+      // src={
+      //   "https://media.istockphoto.com/id/1473780957/vector/default-avatar-profile-user-profile-icon-business-people-profile-picture-portrait-user.jpg?s=2048x2048&w=is&k=20&c=0WrcouAz2sHJscVO004qoRnNXLXDCFF18kje2Rl7nRA="
+      // }
+      src={person?.data?.gender === "F" ? women : men}
+      className="w-[70px] h-[70px] rounded-full object-cover mb-1"
     />
     <p className="text-sm font-medium">{person?.data?.name}</p>
   </div>

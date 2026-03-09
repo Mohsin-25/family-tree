@@ -36,7 +36,7 @@ export const useCreatePerson = ({
       profession: string;
     }) =>
       httpRequest({
-        url: `/trees/${treeId}/persons/`,
+        url: `/trees/${treeId}/persons`,
         method: httpMethods.post,
         payload,
       }),
