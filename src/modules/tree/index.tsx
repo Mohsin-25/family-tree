@@ -90,7 +90,7 @@ const MemberCountStatus = ({
           </Menubar.Trigger>
           <Menubar.Portal>
             <Menubar.Content
-              className="flex flex-col gap-2 min-w-[150px]"
+              className="flex flex-col gap-2 min-w-[150px] max-h-[400px] overflow-y-auto"
               align="start"
               side="right"
               sideOffset={10}

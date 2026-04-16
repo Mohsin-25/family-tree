@@ -1,10 +1,12 @@
 import { useParams } from "@tanstack/react-router";
-import { Edit, Sprout } from "lucide-react";
+import { Edit, Plus, Sprout } from "lucide-react";
 import Tree, { type RawNodeDatum } from "react-d3-tree";
 import { getFamilyTree, useMarkAsRootPerson } from "../services/service";
 import men from "../../../assets/user-vector-men.jpg";
 import women from "../../../assets/user-vector-women.jpg";
 import { Spinner } from "@radix-ui/themes";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAppToast } from "../../../components/Toast";
 
 type FamilyNode = RawNodeDatum & {
   type: "single" | "couple";
@@ -30,14 +32,25 @@ const TestSix = ({
 }) => {
   const { id } = useParams({ from: "/myTree/$id" });
 
-  const { treeData } = getFamilyTree(id);
+  const { treeData, isLoading: isTreeDataLoading } = getFamilyTree(id);
 
-  if (!treeData) return null;
+  if (isTreeDataLoading) {
+    return (
+      <div className="flex items-center justify-center w-full h-[calc(100vh-65px)]">
+        <Spinner className="!size-7" loading />
+      </div>
+    );
+  }
+
+  if (!treeData) {
+    return null;
+  }
 
   const getPersonById = (id: any) => {
-    return treeData?.connectedPeople?.filter(
-      (item: any) => item?._id === id,
-    )?.[0];
+    return (
+      treeData?.connectedPeople?.filter((item: any) => item?._id === id)?.[0] ||
+      treeData?.disConnectedPeople?.filter((item: any) => item?._id === id)?.[0]
+    );
   };
 
   const getStructuredPerson = (obj: any): FamilyNode => {
@@ -62,7 +75,10 @@ const TestSix = ({
     };
   };
 
-  const rootPersonId = treeData?.meta?.rootMemberIds?.[0];
+  const rootPersonId =
+    treeData?.meta?.rootMemberIds?.[0] ||
+    treeData?.connectedPeople?.[0]?._id ||
+    treeData?.disConnectedPeople?.[0]?._id;
 
   const getTopAncestor = (person: any) => {
     let current = person;
@@ -108,7 +124,6 @@ const TestSix = ({
                 onClick={toggleNode}
                 className="flex items-center justify-center"
               >
-                {" "}
                 {/* ✅ THIS enables collapse */}
                 {type === "couple" ? (
                   <CoupleNode
@@ -183,9 +198,27 @@ const SingleNode = ({
   const {
     mutate: markAsRootPersonMutation,
     isPending: isMarkAsRootPersonPending,
-  } = useMarkAsRootPerson();
+  } = useMarkAsRootPerson({ useServiceResponse: false });
 
-  return (
+  const queryClient = useQueryClient();
+  const { id } = useParams({ from: "/myTree/$id" });
+  const { showToast } = useAppToast();
+
+  const markAsRootPersonFn = ({ user }: { user?: any }) => {
+    queryClient.setQueryData(["tree", id], (old: any) => {
+      const newData = {
+        ...old,
+        data: {
+          ...old?.data,
+          meta: { ...old?.data?.meta, rootMemberIds: [user] },
+        },
+      };
+
+      return newData;
+    });
+  };
+
+  return person ? (
     <div
       className={`relative bg-white group border px-4 py-6 rounded-xl shadow-md flex flex-col items-center justify-center w-[200px] h-[180px] cursor-auto ${
         isSpouse && "bg-blue-100!"
@@ -202,9 +235,6 @@ const SingleNode = ({
         <Edit size={32} />
       </button>
       <img
-        // src={
-        //   "https://media.istockphoto.com/id/1473780957/vector/default-avatar-profile-user-profile-icon-business-people-profile-picture-portrait-user.jpg?s=2048x2048&w=is&k=20&c=0WrcouAz2sHJscVO004qoRnNXLXDCFF18kje2Rl7nRA="
-        // }
         src={person?.data?.gender === "F" ? women : men}
         className="w-[70px] h-[70px] rounded-full object-cover mb-1"
       />
@@ -216,10 +246,27 @@ const SingleNode = ({
           onClick={(e) => {
             e.stopPropagation();
 
-            markAsRootPersonMutation({
-              treeId: person?.data?.treeId,
-              personId: person?.data?._id,
-            });
+            markAsRootPersonMutation(
+              {
+                treeId: person?.data?.treeId,
+                personId: person?.data?._id,
+              },
+              {
+                onSuccess: (res) => {
+                  if (res?.status) {
+                    markAsRootPersonFn({ user: person?.data?._id });
+                  }
+                },
+                onError: (err: any) => {
+                  if (err?.message) {
+                    showToast({
+                      description: err?.message,
+                      status: err?.status,
+                    });
+                  }
+                },
+              },
+            );
           }}
           className="text-primary/60 bg-white p-2 hover:text-primary items-center justify-center rounded-full absolute right-1 -bottom-3 cursor-pointer"
         >
@@ -230,6 +277,27 @@ const SingleNode = ({
           )}
         </button>
       )}
+    </div>
+  ) : (
+    <EmptySingleNode setPopup={setPopup} />
+  );
+};
+
+const EmptySingleNode = ({ setPopup }: { setPopup?: any }) => {
+  return (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        setPopup({ data: {}, state: true, form: "addMember" });
+      }}
+      className="p-5 flex flex-col gap-5 w-[200px] h-[180px] border border-dashed border-black/50 rounded-lg shadow-lg items-center justify-center hover:border-black/70 cursor-pointer hover:bg-white"
+    >
+      <span className="bg-black/10 rounded-full p-4">
+        <Plus size={30} className="text-muted-foreground" />
+      </span>
+      <div className="flex flex-col text-center">
+        <span className="text-md font-semibold">Add A Member</span>
+      </div>
     </div>
   );
 };

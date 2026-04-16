@@ -13,7 +13,7 @@ export const getFamilyTree = (id: any) => {
   return {
     treeData: data?.data,
     isFetching,
-    isLoading,
+    isLoading: isLoading || isFetching,
   };
 };
 
@@ -162,7 +162,11 @@ export const useLinkPerson = ({
   return { mutate, isPending };
 };
 
-export const useMarkAsRootPerson = () => {
+export const useMarkAsRootPerson = ({
+  useServiceResponse = true,
+}: {
+  useServiceResponse?: boolean;
+} = {}) => {
   const queryClient = useQueryClient();
   const { showToast } = useAppToast();
 
@@ -173,15 +177,17 @@ export const useMarkAsRootPerson = () => {
         method: httpMethods.post,
       }),
     onSuccess: (res) => {
-      showToast({
-        description: res?.message,
-        status: res?.status,
-      });
-
-      if (res?.status) {
-        queryClient.invalidateQueries({
-          queryKey: ["tree"],
+      if (useServiceResponse) {
+        showToast({
+          description: res?.message,
+          status: res?.status,
         });
+
+        if (res?.status) {
+          queryClient.invalidateQueries({
+            queryKey: ["tree"],
+          });
+        }
       }
     },
     onError: (err: any) => {
