@@ -1,9 +1,10 @@
 import { useParams } from "@tanstack/react-router";
-import { Edit } from "lucide-react";
+import { Edit, Sprout } from "lucide-react";
 import Tree, { type RawNodeDatum } from "react-d3-tree";
-import { getFamilyTree } from "../services/service";
+import { getFamilyTree, useMarkAsRootPerson } from "../services/service";
 import men from "../../../assets/user-vector-men.jpg";
 import women from "../../../assets/user-vector-women.jpg";
+import { Spinner } from "@radix-ui/themes";
 
 type FamilyNode = RawNodeDatum & {
   type: "single" | "couple";
@@ -178,28 +179,57 @@ const SingleNode = ({
   isSpouse?: any;
   setPopup?: any;
   popup?: any;
-}) => (
-  <div
-    className={`relative bg-white group border px-4 py-6 rounded-xl shadow-md flex flex-col items-center justify-center w-[200px] h-[180px] cursor-auto ${
-      isSpouse && "bg-blue-100!"
-    }`}
-  >
-    <button
-      className="text-primary/60 hover:text-primary hidden group-hover:flex items-center justify-center rounded-full absolute right-2 top-2 cursor-pointer"
-      onClick={(e) => {
-        e.stopPropagation();
-        setPopup({ data: person, state: true, form: "editMember" });
-      }}
+}) => {
+  const {
+    mutate: markAsRootPersonMutation,
+    isPending: isMarkAsRootPersonPending,
+  } = useMarkAsRootPerson();
+
+  return (
+    <div
+      className={`relative bg-white group border px-4 py-6 rounded-xl shadow-md flex flex-col items-center justify-center w-[200px] h-[180px] cursor-auto ${
+        isSpouse && "bg-blue-100!"
+      }`}
     >
-      <Edit size={32} />
-    </button>
-    <img
-      // src={
-      //   "https://media.istockphoto.com/id/1473780957/vector/default-avatar-profile-user-profile-icon-business-people-profile-picture-portrait-user.jpg?s=2048x2048&w=is&k=20&c=0WrcouAz2sHJscVO004qoRnNXLXDCFF18kje2Rl7nRA="
-      // }
-      src={person?.data?.gender === "F" ? women : men}
-      className="w-[70px] h-[70px] rounded-full object-cover mb-1"
-    />
-    <p className="text-sm font-medium">{person?.data?.name}</p>
-  </div>
-);
+      <button
+        title="Edit Person"
+        className="text-primary/60 hover:text-primary hidden group-hover:flex items-center justify-center rounded-full absolute right-2 top-2 cursor-pointer"
+        onClick={(e) => {
+          e.stopPropagation();
+          setPopup({ data: person, state: true, form: "editMember" });
+        }}
+      >
+        <Edit size={32} />
+      </button>
+      <img
+        // src={
+        //   "https://media.istockphoto.com/id/1473780957/vector/default-avatar-profile-user-profile-icon-business-people-profile-picture-portrait-user.jpg?s=2048x2048&w=is&k=20&c=0WrcouAz2sHJscVO004qoRnNXLXDCFF18kje2Rl7nRA="
+        // }
+        src={person?.data?.gender === "F" ? women : men}
+        className="w-[70px] h-[70px] rounded-full object-cover mb-1"
+      />
+      <p className="text-sm font-medium">{person?.data?.name}</p>
+
+      {isSpouse && (person?.data?.father || person?.data?.mother) && (
+        <button
+          title="View Spouse's Tree"
+          onClick={(e) => {
+            e.stopPropagation();
+
+            markAsRootPersonMutation({
+              treeId: person?.data?.treeId,
+              personId: person?.data?._id,
+            });
+          }}
+          className="text-primary/60 bg-white p-2 hover:text-primary items-center justify-center rounded-full absolute right-1 -bottom-3 cursor-pointer"
+        >
+          {isMarkAsRootPersonPending ? (
+            <Spinner className="!size-7" loading />
+          ) : (
+            <Sprout size={32} />
+          )}
+        </button>
+      )}
+    </div>
+  );
+};
