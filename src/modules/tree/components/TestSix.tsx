@@ -62,17 +62,22 @@ const TestSix = ({
   };
 
   const rootPersonId = treeData?.meta?.rootMemberIds?.[0];
-  //  treeData?.meta?.rootMemberIds?.find(
-  //     (item: any) =>
-  //       getPersonById(item)?.gender === "M" && !getPersonById(item)?.father,
-  //   ) ||
-  //   treeData?.meta?.rootMemberIds?.find(
-  //     (item: any) =>
-  //       getPersonById(item)?.gender === "F" && !getPersonById(item)?.father,
-  //   );
+
+  const getTopAncestor = (person: any) => {
+    let current = person;
+    while (current?.father) {
+      current = getPersonById(current.father);
+    }
+    while (current?.mother) {
+      current = getPersonById(current.mother);
+    }
+    return current;
+  };
+
+  const actualRoot = getTopAncestor(getPersonById(rootPersonId));
 
   const structuredData: FamilyNode | any = rootPersonId
-    ? getStructuredPerson(getPersonById(rootPersonId))
+    ? getStructuredPerson(actualRoot)
     : {};
 
   return (
