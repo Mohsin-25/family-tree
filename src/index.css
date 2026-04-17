@@ -22,3 +22,54 @@
 *::-webkit-scrollbar-thumb:hover {
   background-color: #555;
 }
+
+/* HTML: <div class="dot-loader"></div> */
+.dot-loader {
+  width: 12px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: l5 1s infinite linear alternate;
+}
+@keyframes l5 {
+  0% {
+    box-shadow:
+      20px 0 #e70032c1,
+      -20px 0 #e7003220;
+    background: #e70032c1;
+  }
+  33% {
+    box-shadow:
+      20px 0 #e70032c1,
+      -20px 0 #e7003220;
+    background: #e7003220;
+  }
+  66% {
+    box-shadow:
+      20px 0 #e7003220,
+      -20px 0 #e70032c1;
+    background: #e7003220;
+  }
+  100% {
+    box-shadow:
+      20px 0 #e7003220,
+      -20px 0 #e70032c1;
+    background: #e70032c1;
+  }
+}
+
+/* HTML: <div class="loading-text-loader"></div> */
+.loading-text-loader {
+  font-weight: bold;
+  font-family: sans-serif;
+  font-size: 24px;
+  color: #e70032c1;
+  animation: l1 0.5s linear infinite alternate;
+}
+.loading-text-loader:before {
+  content: "Loading";
+}
+@keyframes l1 {
+  to {
+    opacity: 0;
+  }
+}

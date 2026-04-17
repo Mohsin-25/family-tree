@@ -7,6 +7,7 @@ import women from "../../../assets/user-vector-women.jpg";
 import { Spinner } from "@radix-ui/themes";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAppToast } from "../../../components/Toast";
+import LazyLoader from "../../../components/ui/Loader";
 
 type FamilyNode = RawNodeDatum & {
   type: "single" | "couple";
@@ -32,7 +33,11 @@ const TestSix = ({
 }) => {
   const { id } = useParams({ from: "/myTree/$id" });
 
-  const { treeData, isLoading: isTreeDataLoading } = getFamilyTree(id);
+  const {
+    treeData,
+    isLoading: isTreeDataLoading,
+    isFetching,
+  } = getFamilyTree(id);
 
   if (isTreeDataLoading) {
     return (
@@ -144,6 +149,7 @@ const TestSix = ({
           );
         }}
       />
+      {isFetching && <LazyLoader />}
     </div>
   );
 };
