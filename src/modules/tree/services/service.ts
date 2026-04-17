@@ -8,12 +8,13 @@ export const getFamilyTree = (id: any) => {
     queryFn: () => {
       return httpRequest({ url: `/trees/${id}`, method: httpMethods.get });
     },
+    placeholderData: (prev) => prev,
   });
 
   return {
     treeData: data?.data,
     isFetching,
-    isLoading: isLoading || isFetching,
+    isLoading,
   };
 };
 
