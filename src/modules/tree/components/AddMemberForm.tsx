@@ -29,7 +29,7 @@ export function AddMemberForm({
     defaultValues: {
       name: "",
       gender: undefined,
-      dob: "",
+      dob: "1900-01-01",
       maritalStatus: undefined,
       profession: "",
     },
@@ -158,7 +158,7 @@ export function AddMemberForm({
                   id="profession"
                   type="text"
                   placeholder="Enter"
-                  required
+                  // required
                   className="ring-0! !focus:ring-0 outline-none! !focus:outline-none"
                   {...methods.register("profession")}
                 />
