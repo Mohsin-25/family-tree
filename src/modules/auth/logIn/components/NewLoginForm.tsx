@@ -1,21 +1,21 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { Input } from "../../../../components/ui/input";
 import { Button } from "../../../../components/ui/button";
-import { useGetLoggedin } from "../services/service";
-import { useGetSignin } from "../../signIn/services/service";
 
 const NewLoginForm = ({
   isLogin,
-  setIsLogin,
+  mutate,
+  isPending = false,
+  signinMutate,
+  isSigninPending = false,
 }: {
   isLogin?: Boolean;
-  setIsLogin?: any;
+  mutate?: any;
+  isPending?: boolean | undefined;
+  signinMutate?: any;
+  isSigninPending?: boolean | undefined;
 }) => {
   const methods = useForm();
-  const { mutate, isPending } = useGetLoggedin();
-  const { mutate: signinMutate, isPending: isSigninPending } = useGetSignin({
-    setIsLogin,
-  });
 
   const onSubmit = () => {
     const data = methods.getValues();
@@ -23,6 +23,7 @@ const NewLoginForm = ({
       userName: data?.userName,
       password: data?.password,
     };
+
     if (isLogin) {
       mutate(payload);
     } else {
