@@ -19,7 +19,9 @@ export const useGetSignin = ({ setIsLogin }: { setIsLogin?: any }) => {
         status: res?.status,
       });
       if (res?.status) {
-        setIsLogin(true);
+        setTimeout(() => {
+          setIsLogin(true);
+        }, 1500);
       } else {
         reset();
       }
