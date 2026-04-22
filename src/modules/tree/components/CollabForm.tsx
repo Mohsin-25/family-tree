@@ -1,45 +1,114 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { Card } from "../../../components/ui/card";
-import { Link } from "lucide-react";
+import { Copy, EllipsisVertical, Link, Users } from "lucide-react";
 import { Button } from "../../../components/ui/button";
+import { useState } from "react";
 
 const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
   const methods = useForm();
 
-  const onSubmit = () => {
-    const data = methods.getValues();
+  console.log({ setPopup, popup });
 
-    const payload = {
-      relativeId: data?.relative,
-      relationId: +data?.relation,
-    };
-  };
+  const [link, setLink] = useState(false);
+
+  const onSubmit = () => {};
+
+  const dummyMembers = [
+    {
+      name: "Mohammad Mohsin (You)",
+      role: "Owner",
+    },
+    {
+      name: "Mohammad Wasim",
+      role: "Editor",
+    },
+    {
+      name: "Kunal",
+      role: "Viewer",
+    },
+  ];
+
+  async function copyToClipboard(text?: any) {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("Link copied to clipboard");
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  }
+
+  const url = "https://www.youtube.com";
 
   return (
     <div className="">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Card className="w-full bg-white p-5 gap-3">
-            <p>Invite collaborators</p>
+            <p className="font-[500]">Invite collaborators</p>
             <p className="text-[14px] -mt-2 text-gray-500">
               Share this tree with others and work together
             </p>
 
-            <hr className="text-gray-300" />
+            <hr className="text-gray-300 w-[calc(100%+40px)] -ml-5" />
+
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <Link className="size-10 bg-primary/10 rounded-full text-primary p-2" />
+                <Link className="size-10 border border-primary/10 bg-primary/5 rounded-full text-primary p-2" />
                 <div className="flex flex-col">
-                  <p>Generate Invitation Link</p>
+                  <p className="font-[500]">Generate Invitation Link</p>
                   <p className="text-[14px] text-gray-500">
                     Anyone with this link can view or join this tree
                   </p>
                 </div>
               </div>
-              <Button>
+              <Button onClick={() => setLink(!link)}>
                 <Link />
                 Generate Invitation Link
               </Button>
+            </div>
+            {link && (
+              <div className="flex gap-4 items-center">
+                <span
+                  id="invitationLink"
+                  className="text-sm border rounded-md px-3 py-2"
+                >
+                  {url}
+                </span>
+                <Button onClick={() => copyToClipboard(url)} variant="outline">
+                  <Copy />
+                  Copy Link
+                </Button>
+              </div>
+            )}
+
+            <div className="flex flex-col border rounded-md mt-2">
+              <div className="flex bg-primary/10 w-full text-sm px-4 py-2 rounded-t-md">
+                <Users className="size-4 mt-0.5 mr-2" />
+                <span className="font-[500]">Current Collaborators</span>
+                <span className="ml-auto font-[500]">
+                  {dummyMembers?.length} Member(s)
+                </span>
+              </div>
+              <div className="max-h-[220px] overflow-y-auto">
+                {dummyMembers?.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className={`flex ${index < dummyMembers?.length - 1 && "border-b"} p-2 items-center gap-2 text-sm`}
+                    >
+                      <span className="flex items-center justify-center rounded-full size-8 bg-primary/5 border border-primary/10">
+                        {item?.name?.[0]}
+                      </span>
+                      <span>{item?.name}</span>
+                      <span className="flex items-center justify-center rounded-md py-1 px-2 ml-auto bg-primary/5 border border-primary/10">
+                        {item?.role}
+                      </span>
+                      <EllipsisVertical className="size-4 mt-0.5 mr-2 ml-1 cursor-pointer" />
+                    </div>
+                  );
+                })}
+                <div></div>
+              </div>
             </div>
           </Card>
         </form>
