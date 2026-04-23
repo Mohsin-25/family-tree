@@ -89,3 +89,19 @@ export const useAcceptInvitation = ({ id, treeId }: any) => {
     isPending,
   };
 };
+
+export const useGetTreeMembers = ({ id }: any) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["treeMembers", id],
+    queryFn: () =>
+      httpRequest({
+        method: httpMethods.get,
+        url: `/trees/${id}/members`,
+      }),
+    enabled: !!id,
+  });
+  return {
+    members: data?.data || [],
+    isLoading,
+  };
+};

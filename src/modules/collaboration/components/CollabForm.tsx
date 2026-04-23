@@ -3,14 +3,13 @@ import { Card } from "../../../components/ui/card";
 import { Copy, EllipsisVertical, Link, Users } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import { Spinner } from "@radix-ui/themes";
-import { useGenerateInviteToken } from "../services/service";
+import { useGenerateInviteToken, useGetTreeMembers } from "../services/service";
 import { useParams } from "@tanstack/react-router";
+import dayjs from "dayjs";
 
 const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
   const methods = useForm();
   const { id } = useParams({ from: "/myTree/$id" });
-
-  console.log({ setPopup, popup });
 
   const {
     mutate: generateInviteTokenMutate,
@@ -18,25 +17,16 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
     isPending: isGenerateInviteTokenPending,
   } = useGenerateInviteToken();
 
+  const { members, isLoading: isTreeMembersLoading } = useGetTreeMembers({
+    id,
+  });
+
+  console.log({ setPopup, popup, members });
+
   const token = generateInviteTokenData?.data?.inviteToken;
   const url = location.origin + "/inviteToken/" + token;
 
   const onSubmit = () => {};
-
-  const dummyMembers = [
-    {
-      name: "Mohammad Mohsin (You)",
-      role: "Owner",
-    },
-    {
-      name: "Mohammad Wasim",
-      role: "Editor",
-    },
-    {
-      name: "Kunal",
-      role: "Viewer",
-    },
-  ];
 
   async function copyToClipboard(text?: any) {
     try {
@@ -109,29 +99,47 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
                 <Users className="size-4 mt-0.5 mr-2" />
                 <span className="font-[500]">Current Collaborators</span>
                 <span className="ml-auto font-[500]">
-                  {dummyMembers?.length} Member(s)
+                  {members?.length || ""} Member(s)
                 </span>
               </div>
-              <div className="max-h-[220px] overflow-y-auto">
-                {dummyMembers?.map((item, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className={`flex ${index < dummyMembers?.length - 1 && "border-b"} p-2 items-center gap-2 text-sm`}
-                    >
-                      <span className="flex items-center justify-center rounded-full size-8 bg-primary/5 border border-primary/10">
-                        {item?.name?.[0]}
-                      </span>
-                      <span>{item?.name}</span>
-                      <span className="flex items-center justify-center rounded-md py-1 px-2 ml-auto bg-primary/5 border border-primary/10">
-                        {item?.role}
-                      </span>
-                      <EllipsisVertical className="size-4 mt-0.5 mr-2 ml-1 cursor-pointer" />
-                    </div>
-                  );
-                })}
-                <div></div>
-              </div>
+              {isTreeMembersLoading ? (
+                <div className="flex w-full items-center justify-center py-4">
+                  <Spinner loading />
+                </div>
+              ) : (
+                <div className="max-h-[220px] overflow-y-auto">
+                  {members?.map((item: any, index: any) => {
+                    return (
+                      <div
+                        key={index}
+                        className={`flex ${index < members?.length - 1 && "border-b"} p-2 items-center gap-2 text-sm`}
+                      >
+                        <span className="flex items-center justify-center rounded-full size-8 bg-primary/5 border border-primary/10 uppercase">
+                          {item?.userId?.fullName?.[0]}
+                        </span>
+                        <span>
+                          {item?.userId?.fullName}{" "}
+                          {localStorage.getItem("fullName") ==
+                          item?.userId?.fullName
+                            ? "(You)"
+                            : ""}
+                        </span>
+                        <span className="flex items-center justify-center rounded-md py-1 px-2 ml-auto bg-primary/5 border border-primary/10 lowercase">
+                          {item?.role}
+                        </span>
+                        <span className="flex items-center justify-center rounded-md py-1 px-2 ml-auto bg-primary/5 border border-primary/10">
+                          Joined{" : "}
+                          {dayjs(item?.createdAt).format(
+                            "DD-MMM-YYYY | hh:mm A",
+                          )}
+                        </span>
+                        <EllipsisVertical className="size-4 mt-0.5 mr-2 ml-1 cursor-pointer" />
+                      </div>
+                    );
+                  })}
+                  <div></div>
+                </div>
+              )}
             </div>
           </Card>
         </form>
