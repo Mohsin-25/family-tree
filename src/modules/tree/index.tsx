@@ -15,7 +15,7 @@ import TestSix from "./components/TestSix";
 import { getFamilyTree, useMarkAsRootPerson } from "./services/service";
 import LinkMemberForm from "./components/LinkMemberForm";
 import { Spinner, Theme } from "@radix-ui/themes";
-import CollabForm from "./components/CollabForm";
+import CollabForm from "../collaboration/components/CollabForm";
 
 const MyTree = () => {
   const [popup, setPopup] = useState({ data: {}, state: false, form: "" });

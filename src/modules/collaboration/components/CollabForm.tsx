@@ -2,14 +2,24 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Card } from "../../../components/ui/card";
 import { Copy, EllipsisVertical, Link, Users } from "lucide-react";
 import { Button } from "../../../components/ui/button";
-import { useState } from "react";
+import { Spinner } from "@radix-ui/themes";
+import { useGenerateInviteToken } from "../services/service";
+import { useParams } from "@tanstack/react-router";
 
 const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
   const methods = useForm();
+  const { id } = useParams({ from: "/myTree/$id" });
 
   console.log({ setPopup, popup });
 
-  const [link, setLink] = useState(false);
+  const {
+    mutate: generateInviteTokenMutate,
+    data: generateInviteTokenData,
+    isPending: isGenerateInviteTokenPending,
+  } = useGenerateInviteToken();
+
+  const token = generateInviteTokenData?.data?.inviteToken;
+  const url = location.origin + "/inviteToken/" + token;
 
   const onSubmit = () => {};
 
@@ -31,13 +41,19 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
   async function copyToClipboard(text?: any) {
     try {
       await navigator.clipboard.writeText(text);
-      alert("Link copied to clipboard");
+      const copyLink = document.getElementById("copyLink");
+      if (copyLink) {
+        setTimeout(() => {
+          copyLink.innerHTML = "Copied";
+        }, 500);
+        setTimeout(() => {
+          copyLink.innerHTML = "Copy Link";
+        }, 3000);
+      }
     } catch (err) {
       console.error("Failed to copy: ", err);
     }
   }
-
-  const url = "https://www.youtube.com";
 
   return (
     <div className="">
@@ -61,12 +77,15 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
                   </p>
                 </div>
               </div>
-              <Button onClick={() => setLink(!link)}>
-                <Link />
+              <Button
+                onClick={() => generateInviteTokenMutate({ treeId: id })}
+                disabled={isGenerateInviteTokenPending}
+              >
+                {isGenerateInviteTokenPending ? <Spinner loading /> : <Link />}
                 Generate Invitation Link
               </Button>
             </div>
-            {link && (
+            {token && (
               <div className="flex gap-4 items-center">
                 <span
                   id="invitationLink"
@@ -74,7 +93,11 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
                 >
                   {url}
                 </span>
-                <Button onClick={() => copyToClipboard(url)} variant="outline">
+                <Button
+                  id="copyLink"
+                  onClick={() => copyToClipboard(url)}
+                  variant="outline"
+                >
                   <Copy />
                   Copy Link
                 </Button>
