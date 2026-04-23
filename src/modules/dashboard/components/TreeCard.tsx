@@ -1,7 +1,16 @@
 import { useNavigate } from "@tanstack/react-router";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { CalendarDays, Plus, Trash, Trees, Users } from "lucide-react";
+import {
+  CalendarDays,
+  Crown,
+  Eye,
+  Plus,
+  Trash,
+  Trees,
+  UserPen,
+  Users,
+} from "lucide-react";
 import { useState } from "react";
 import { Button } from "../../../components/ui/button";
 import PopupWrapper from "../../form/components/PopupWrapper";
@@ -29,8 +38,25 @@ const TreeCard = ({ item }: { item: any }) => {
           {item?.title}
         </span>
       </div>
+
       <div className="p-4 flex flex-col gap-4">
         <span className="text-sm">{item?.description}</span>
+        <div className="flex">
+          <span className="flex gap-2 items-center">
+            {item?.role === "OWNER" && (
+              <Crown size={16} className="text-muted-foreground" />
+            )}
+            {item?.role === "VIEWER" && (
+              <Eye size={16} className="text-muted-foreground" />
+            )}
+            {item?.role === "EDITOR" && (
+              <UserPen size={16} className="text-muted-foreground" />
+            )}
+            <span className="text-sm text-muted-foreground lowercase">
+              {item?.role}
+            </span>
+          </span>
+        </div>{" "}
         <div className="flex justify-between">
           <span className="flex gap-2 items-center">
             <Users size={16} className="text-muted-foreground" />
@@ -54,6 +80,7 @@ const TreeCard = ({ item }: { item: any }) => {
           </span>
         </div>
       </div>
+
       <div className="flex gap-4 p-4 pt-0 mt-auto">
         <Button
           variant={"secondary"}

@@ -7,7 +7,7 @@ export const getUserTrees = () => {
     queryKey: ["userTrees"],
     queryFn: () =>
       httpRequest({
-        url: "/trees/",
+        url: "/trees",
         method: httpMethods.get,
       }),
   });
