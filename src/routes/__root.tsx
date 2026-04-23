@@ -9,7 +9,9 @@ export const Route = createRootRoute({
 function RootComponent() {
   const matchRoute = useMatchRoute();
 
-  const isAuthPage = matchRoute({ to: "/signIn", fuzzy: true });
+  const isAuthPage =
+    matchRoute({ to: "/signIn", fuzzy: true }) ||
+    matchRoute({ to: "inviteToken", fuzzy: true });
 
   if (isAuthPage) {
     return <Outlet />;

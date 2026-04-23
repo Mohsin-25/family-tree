@@ -1,6 +1,13 @@
 import * as Menubar from "@radix-ui/react-menubar";
 import { useParams } from "@tanstack/react-router";
-import { Crown, Link, Plus, UserRoundCheck, UserX } from "lucide-react";
+import {
+  Crown,
+  Handshake,
+  Link,
+  Plus,
+  UserRoundCheck,
+  UserX,
+} from "lucide-react";
 import { useState } from "react";
 import { AddMemberForm } from "./components/AddMemberForm";
 import PopupWrapper from "../form/components/PopupWrapper";
@@ -8,6 +15,7 @@ import TestSix from "./components/TestSix";
 import { getFamilyTree, useMarkAsRootPerson } from "./services/service";
 import LinkMemberForm from "./components/LinkMemberForm";
 import { Spinner, Theme } from "@radix-ui/themes";
+import CollabForm from "../collaboration/components/CollabForm";
 
 const MyTree = () => {
   const [popup, setPopup] = useState({ data: {}, state: false, form: "" });
@@ -24,6 +32,8 @@ const MyTree = () => {
       <AddMember setPopup={setPopup} />
 
       <LinkMember setPopup={setPopup} popup={popup} />
+
+      <Collab setPopup={setPopup} popup={popup} />
     </div>
   );
 };
@@ -209,5 +219,24 @@ const AddMember = ({ setPopup }: { setPopup: any }) => {
       className="fixed bg-secondary text-white rounded-full bottom-5 right-5 p-1 cursor-pointer"
       onClick={() => setPopup({ data: {}, state: true, form: "addMember" })}
     />
+  );
+};
+
+const Collab = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
+  return (
+    <>
+      <Handshake
+        size={40}
+        className="fixed bg-secondary text-white rounded-full bottom-5 left-5 p-1 cursor-pointer"
+        onClick={() => setPopup({ data: {}, state: true, form: "collab" })}
+      />
+      <PopupWrapper
+        open={popup?.state && popup?.form === "collab"}
+        onOpenChange={() => setPopup({ data: {}, state: false })}
+        className="max-w-[800px]!"
+      >
+        <CollabForm popup={popup} setPopup={setPopup} />
+      </PopupWrapper>
+    </>
   );
 };

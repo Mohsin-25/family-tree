@@ -13,6 +13,7 @@ import { Route as SignInRouteImport } from './routes/signIn'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MyTreeIdRouteImport } from './routes/myTree/$id'
+import { Route as InviteTokenIdRouteImport } from './routes/inviteToken/$id'
 
 const SignInRoute = SignInRouteImport.update({
   id: '/signIn',
@@ -34,17 +35,24 @@ const MyTreeIdRoute = MyTreeIdRouteImport.update({
   path: '/myTree/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InviteTokenIdRoute = InviteTokenIdRouteImport.update({
+  id: '/inviteToken/$id',
+  path: '/inviteToken/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/signIn': typeof SignInRoute
+  '/inviteToken/$id': typeof InviteTokenIdRoute
   '/myTree/$id': typeof MyTreeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/signIn': typeof SignInRoute
+  '/inviteToken/$id': typeof InviteTokenIdRoute
   '/myTree/$id': typeof MyTreeIdRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,28 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/signIn': typeof SignInRoute
+  '/inviteToken/$id': typeof InviteTokenIdRoute
   '/myTree/$id': typeof MyTreeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/signIn' | '/myTree/$id'
+  fullPaths: '/' | '/dashboard' | '/signIn' | '/inviteToken/$id' | '/myTree/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/signIn' | '/myTree/$id'
-  id: '__root__' | '/' | '/dashboard' | '/signIn' | '/myTree/$id'
+  to: '/' | '/dashboard' | '/signIn' | '/inviteToken/$id' | '/myTree/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/signIn'
+    | '/inviteToken/$id'
+    | '/myTree/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   SignInRoute: typeof SignInRoute
+  InviteTokenIdRoute: typeof InviteTokenIdRoute
   MyTreeIdRoute: typeof MyTreeIdRoute
 }
 
@@ -99,6 +115,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyTreeIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/inviteToken/$id': {
+      id: '/inviteToken/$id'
+      path: '/inviteToken/$id'
+      fullPath: '/inviteToken/$id'
+      preLoaderRoute: typeof InviteTokenIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -106,6 +129,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   SignInRoute: SignInRoute,
+  InviteTokenIdRoute: InviteTokenIdRoute,
   MyTreeIdRoute: MyTreeIdRoute,
 }
 export const routeTree = rootRouteImport

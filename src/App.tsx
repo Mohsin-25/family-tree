@@ -8,12 +8,19 @@ const router = createRouter({ routeTree });
 
 function App() {
   const token = localStorage.getItem("token");
+  const redirectTo = location.pathname?.includes("inviteToken")
+    ? location.pathname
+    : "/dashboard";
 
   useEffect(() => {
-    if (!token && location.pathname !== "/signIn") {
-      window.location.href = "/signIn";
+    if (!token && !location.pathname.includes("signIn")) {
+      if (redirectTo) {
+        window.location.href = `/signIn?redirectTo=${redirectTo}`;
+      } else {
+        window.location.href = `/signIn`;
+      }
     }
-  }, [token, location.pathname]);
+  }, [token, location.pathname, redirectTo]);
 
   return (
     <AppToastProvider>

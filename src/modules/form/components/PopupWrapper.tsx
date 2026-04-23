@@ -5,15 +5,17 @@ const PopupWrapper = ({
   open,
   onOpenChange,
   children,
+  className,
 }: {
   open?: any;
   onOpenChange?: any;
   children?: any;
+  className?: any;
 }) => {
   return (
-    <div className="">
+    <div>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="p-0 border-none">
+        <DialogContent className={`p-0 border-none ${className}`}>
           <Theme>{children}</Theme>
         </DialogContent>
       </Dialog>
