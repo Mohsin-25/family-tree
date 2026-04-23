@@ -46,10 +46,17 @@ const ExistingMemberOfTree = ({ data }: any) => {
         </div>
         <div className="flex justify-between w-full mt-5">
           <Button
-            className="w-full"
+            className="w-[47%]"
             onClick={() => navigate({ to: `/myTree/${data?.tree?.id}` })}
           >
             View Tree
+          </Button>
+          <Button
+            variant="outline"
+            className="bg-red-100 w-[47%]"
+            onClick={() => navigate({ to: "/dashboard" })}
+          >
+            Go Back
           </Button>
         </div>
       </div>
