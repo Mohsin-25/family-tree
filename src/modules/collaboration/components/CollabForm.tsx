@@ -1,8 +1,8 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { Card } from "../../../components/ui/card";
-import { Copy, EllipsisVertical, Link, Users } from "lucide-react";
+import { Copy, EllipsisVertical, Link } from "lucide-react";
 import { Button } from "../../../components/ui/button";
-import { Spinner } from "@radix-ui/themes";
+import { Spinner, Table } from "@radix-ui/themes";
 import { useGenerateInviteToken, useGetTreeMembers } from "../services/service";
 import { useParams } from "@tanstack/react-router";
 import dayjs from "dayjs";
@@ -94,53 +94,54 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
               </div>
             )}
 
-            <div className="flex flex-col border rounded-md mt-2">
-              <div className="flex bg-primary/10 w-full text-sm px-4 py-2 rounded-t-md">
-                <Users className="size-4 mt-0.5 mr-2" />
-                <span className="font-[500]">Current Collaborators</span>
-                <span className="ml-auto font-[500]">
-                  {members?.length || ""} Member(s)
-                </span>
-              </div>
-              {isTreeMembersLoading ? (
-                <div className="flex w-full items-center justify-center py-4">
-                  <Spinner loading />
-                </div>
-              ) : (
-                <div className="max-h-[220px] overflow-y-auto">
+            <hr className="text-gray-300 w-[calc(100%+40px)] -ml-5 mt-3" />
+
+            <span className="ml-3 text-sm font-[500]">
+              Current Collaborators ({members?.length})
+            </span>
+            <Table.Root>
+              <Table.Header className="border-t bg-gray-200">
+                <Table.Row>
+                  <Table.ColumnHeaderCell>Members</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Joined</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Action</Table.ColumnHeaderCell>
+                </Table.Row>
+              </Table.Header>
+
+              {!isTreeMembersLoading && (
+                <Table.Body>
                   {members?.map((item: any, index: any) => {
+                    const isOwner =
+                      localStorage.getItem("fullName") ==
+                      item?.userId?.fullName;
                     return (
-                      <div
-                        key={index}
-                        className={`flex ${index < members?.length - 1 && "border-b"} p-2 items-center gap-2 text-sm`}
-                      >
-                        <span className="flex items-center justify-center rounded-full size-8 bg-primary/5 border border-primary/10 uppercase">
-                          {item?.userId?.fullName?.[0]}
-                        </span>
-                        <span>
-                          {item?.userId?.fullName}{" "}
-                          {localStorage.getItem("fullName") ==
-                          item?.userId?.fullName
-                            ? "(You)"
-                            : ""}
-                        </span>
-                        <span className="flex items-center justify-center rounded-md py-1 px-2 ml-auto bg-primary/5 border border-primary/10 lowercase">
+                      <Table.Row key={index}>
+                        <Table.RowHeaderCell>
+                          {item?.userId?.fullName} {isOwner ? "(You)" : ""}
+                        </Table.RowHeaderCell>
+                        <Table.RowHeaderCell className="lowercase">
                           {item?.role}
-                        </span>
-                        <span className="flex items-center justify-center rounded-md py-1 px-2 ml-auto bg-primary/5 border border-primary/10">
-                          Joined{" : "}
+                        </Table.RowHeaderCell>
+                        <Table.RowHeaderCell>
                           {dayjs(item?.createdAt).format(
                             "DD-MMM-YYYY | hh:mm A",
                           )}
-                        </span>
-                        <EllipsisVertical className="size-4 mt-0.5 mr-2 ml-1 cursor-pointer" />
-                      </div>
+                        </Table.RowHeaderCell>
+                        <Table.RowHeaderCell>
+                          <EllipsisVertical className="size-4 mt-0.5 mr-2 ml-1 cursor-pointer" />
+                        </Table.RowHeaderCell>
+                      </Table.Row>
                     );
                   })}
-                  <div></div>
-                </div>
+                </Table.Body>
               )}
-            </div>
+            </Table.Root>
+            {isTreeMembersLoading && (
+              <span className="flex items-center justify-center py-2 w-full">
+                <Spinner loading />
+              </span>
+            )}
           </Card>
         </form>
       </FormProvider>
