@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { Card } from "../../../components/ui/card";
-import { Copy, EllipsisVertical, Link, Users } from "lucide-react";
+import { Copy, EllipsisVertical, Link } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import { Spinner, Table } from "@radix-ui/themes";
 import { useGenerateInviteToken, useGetTreeMembers } from "../services/service";
