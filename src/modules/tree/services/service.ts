@@ -121,21 +121,26 @@ export const useUpdatePerson = ({
 export const useLinkPerson = ({
   setPopup,
   treeId,
-  personId,
 }: {
   setPopup?: any;
   treeId?: any;
-  personId?: any;
 }) => {
   const queryClient = useQueryClient();
   const { showToast } = useAppToast();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (payload: { relativeId: String; relationId: Number }) =>
+    mutationFn: (payload: {
+      relativeId?: String;
+      relationId?: Number;
+      personId?: string;
+    }) =>
       httpRequest({
-        url: `/trees/${treeId}/persons/${personId}`,
+        url: `/trees/${treeId}/persons/${payload?.personId}`,
         method: httpMethods.post,
-        payload,
+        payload: {
+          relativeId: payload?.relativeId,
+          relationId: payload?.relationId,
+        },
       }),
     onSuccess: (res) => {
       showToast({

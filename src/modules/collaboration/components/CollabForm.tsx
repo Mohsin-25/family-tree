@@ -50,7 +50,7 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Card className="w-full bg-white p-5 gap-3">
-            <p className="font-[500]">Invite collaborators</p>
+            <p className="font-[500]">Collaborators</p>
             <p className="text-[14px] -mt-2 text-gray-500">
               Share this tree with others and work together
             </p>
@@ -97,7 +97,7 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
             <hr className="text-gray-300 w-[calc(100%+40px)] -ml-5 mt-3" />
 
             <span className="ml-3 text-sm font-[500]">
-              Current Collaborators ({members?.length})
+              Collaborators ({members?.length})
             </span>
             <Table.Root>
               <Table.Header className="border-t bg-gray-200">
