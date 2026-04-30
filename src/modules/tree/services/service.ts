@@ -29,13 +29,7 @@ export const useCreatePerson = ({
   const { showToast } = useAppToast();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (payload: {
-      name: string;
-      gender: string;
-      dob: string;
-      maritalStatus: string;
-      profession: string;
-    }) =>
+    mutationFn: (payload: FormData) =>
       httpRequest({
         url: `/trees/${treeId}/persons`,
         method: httpMethods.post,
@@ -80,13 +74,7 @@ export const useUpdatePerson = ({
   const { showToast } = useAppToast();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (payload: {
-      name: string;
-      gender: string;
-      dob: string;
-      maritalStatus: string;
-      profession: string;
-    }) =>
+    mutationFn: (payload: FormData) =>
       httpRequest({
         url: `/trees/${treeId}/persons/${personId}`,
         method: httpMethods.put,

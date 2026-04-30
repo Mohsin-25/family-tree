@@ -8,6 +8,7 @@ import { Card } from "../../../components/ui/card";
 import { Dropdown } from "../../../components/ui/Dropdown";
 import { Input } from "../../../components/ui/input";
 import { useCreatePerson, useUpdatePerson } from "../services/service";
+import Uploader from "../../../components/ui/Uploader";
 dayjs.extend(customParseFormat);
 
 type PersonFormValues = {
@@ -16,6 +17,7 @@ type PersonFormValues = {
   dob: string;
   maritalStatus: "S" | "M";
   profession: string;
+  photo?: string;
 };
 
 export function AddMemberForm({
@@ -32,6 +34,7 @@ export function AddMemberForm({
       dob: "1900-01-01",
       maritalStatus: undefined,
       profession: "",
+      photo: "",
     },
   });
 
@@ -54,13 +57,19 @@ export function AddMemberForm({
 
   const onSubmit = () => {
     const data = methods.getValues();
-    const payload = {
-      name: data?.name,
-      gender: data?.gender,
-      dob: data?.dob,
-      maritalStatus: data?.maritalStatus,
-      profession: data?.profession,
-    };
+    const payload = new FormData();
+
+    payload.append("name", data?.name);
+    payload.append("gender", data?.gender);
+    payload.append("dob", data?.dob);
+    payload.append("maritalStatus", data?.maritalStatus);
+    payload.append("profession", data?.profession);
+
+    const file = data?.photo?.[0];
+    if (file) {
+      payload.append("photo", file);
+    }
+
     if (memberIdToBeUpdated) {
       updatePersonMutate(payload);
     } else {
@@ -76,6 +85,7 @@ export function AddMemberForm({
         dob: memberDataToPrefill?.dob,
         maritalStatus: memberDataToPrefill?.maritalStatus || null,
         profession: memberDataToPrefill?.profession,
+        photo: memberDataToPrefill?.photoUrl,
       });
     }
   }, [memberIdToBeUpdated]);
@@ -93,7 +103,32 @@ export function AddMemberForm({
           <hr className="text-gray-300" />
           <div>
             <div className="flex flex-col gap-6">
+              {/* <div className="grid grid-cols-3">
+                <div className="w-min">
+                  <Uploader
+                    methods={methods}
+                    defaultImage={memberDataToPrefill?.photoUrl}
+                  />
+                </div>
+                <div className="grid col-span-2 h-min mt-5">
+                  <label className="w-fit mb-2" htmlFor="name">
+                    Name
+                  </label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Enter"
+                    required
+                    className="ring-0! !focus:ring-0 outline-none! !focus:outline-none"
+                    {...methods.register("name")}
+                  />
+                </div>
+              </div> */}
               <div className="grid gap-2">
+                <Uploader
+                  methods={methods}
+                  defaultImage={memberDataToPrefill?.photoUrl}
+                />
                 <label className="w-fit" htmlFor="name">
                   Name
                 </label>
@@ -152,7 +187,7 @@ export function AddMemberForm({
               </div>
               <div className="grid gap-2">
                 <label className="w-fit" htmlFor="profession">
-                  Profession
+                  About <span className=" text-[12px] -mt-3">( Optional )</span>
                 </label>
                 <Input
                   id="profession"

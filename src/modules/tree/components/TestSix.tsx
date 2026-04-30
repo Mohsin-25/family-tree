@@ -11,6 +11,7 @@ import LazyLoader from "../../../components/ui/Loader";
 
 type FamilyNode = RawNodeDatum & {
   type: "single" | "couple";
+  photoUrl?: string;
   person?: {
     id: string;
     data: any;
@@ -42,7 +43,7 @@ const TestSix = ({
   if (isTreeDataLoading) {
     return (
       <div className="flex items-center justify-center w-full h-[calc(100vh-65px)]">
-        <Spinner className="!size-7" loading />
+        <Spinner className="size-7!" loading />
       </div>
     );
   }
@@ -61,6 +62,7 @@ const TestSix = ({
   const getStructuredPerson = (obj: any): FamilyNode => {
     return {
       name: obj?.name,
+      photoUrl: obj?.photoUrl || "",
       type: obj?.spouse ? "couple" : "single",
       person: {
         id: obj?._id,
@@ -241,7 +243,9 @@ const SingleNode = ({
         <Edit size={32} />
       </button>
       <img
-        src={person?.data?.gender === "F" ? women : men}
+        src={
+          person?.data?.photoUrl || (person?.data?.gender === "F" ? women : men)
+        }
         className="w-[70px] h-[70px] rounded-full object-cover mb-1"
       />
       <p className="text-sm font-medium">{person?.data?.name}</p>
