@@ -23,7 +23,6 @@ const LinkMemberForm = ({
     useLinkPerson({
       setPopup,
       treeId: id,
-      personId: popup?.data?._id,
     });
 
   const methods = useForm();
@@ -31,8 +30,9 @@ const LinkMemberForm = ({
   const onSubmit = () => {
     const data = methods.getValues();
     const payload = {
-      relativeId: data?.relative,
+      relativeId: popup?.data?._id,
       relationId: +data?.relation,
+      personId: data?.relative,
     };
 
     linkPersonMutate(payload);
@@ -73,58 +73,59 @@ const LinkMemberForm = ({
 
           <hr className="text-gray-300 w-[calc(100%+40px)] -ml-5 mb-2" />
 
-          <div className="grid grid-cols-2 gap-4 ratio text-sm">
-            <span className="font-semibold">Select Person</span>
-            <span className="font-semibold">Select Relationship</span>
-          </div>
-          <div className="grid grid-cols-2 gap-4 ratio text-sm">
-            <div className="flex flex-col gap-1 w-full">
-              <div className="border rounded-md">
-                <Input
-                  id="search"
-                  type="text"
-                  placeholder="Search"
-                  className="ring-0! !focus:ring-0 outline-none! !border-none !focus:outline-none !w-full"
-                  {...methods.register("search")}
-                  onInput={() => {
-                    if (methods.watch("relative")) {
-                      methods.setValue("relative", "");
-                    }
-                  }}
-                />
-              </div>
-              <div className="flex flex-col gap-1 max-h-[150px] overflow-y-auto">
-                {relativeOptions
-                  ?.filter((itm) =>
-                    methods.watch("search")
-                      ? itm?.label?.includes(methods.watch("search"))
-                      : itm,
-                  )
-                  ?.map((item) => {
-                    return (
-                      <div
-                        className={`flex gap-2 border rounded-md px-2 py-1.5 cursor-pointer ${methods.watch("relative") == item?.value && "bg-black/20 text-primary font-semibold border-primary"}`}
-                        onClick={() => {
-                          methods.setValue("relative", item?.value);
-                        }}
-                      >
-                        <User />
-                        <span>{item?.label}</span>
-                      </div>
-                    );
-                  })}
-              </div>
+          <div className="flex flex-col gap-2 shadow-md border px-3 py-3 rounded-md">
+            <div className="grid grid-cols-2 gap-4 ratio text-sm">
+              <span className="font-semibold">Select Person</span>
+              <span className="font-semibold">Select Relationship</span>
             </div>
-            <div className="grid w-full grid-cols-2 gap-4 h-[200px]">
-              {relationOptions?.map((item) => {
-                return (
-                  <div
-                    className={`flex w-full flex-col gap-2 items-center justify-center border rounded-md px-4 py-2 cursor-pointer ${methods.watch("relation") == item?.value && "bg-black/20 text-primary font-semibold border-primary"}`}
-                    onClick={() => {
-                      methods.setValue("relation", item?.value);
-                    }}
-                  >
-                    {/* {item?.label === "Father" ? (
+            <div className="grid grid-cols-2 gap-4 ratio text-sm">
+              <div className="flex flex-col gap-1 w-full">
+                <div className="border rounded-md mb-1">
+                  <Input
+                    id="search"
+                    type="text"
+                    placeholder="Search"
+                    className="ring-0! !focus:ring-0 outline-none! !border-none !focus:outline-none !w-full"
+                    {...methods.register("search")}
+                    // onInput={() => {
+                    //   if (methods.watch("relative")) {
+                    //     methods.setValue("relative", "");
+                    //   }
+                    // }}
+                  />
+                </div>
+                <div className="flex flex-col gap-1 max-h-[150px] overflow-y-auto pb-2">
+                  {relativeOptions
+                    ?.filter((itm) =>
+                      methods.watch("search")
+                        ? itm?.label?.includes(methods.watch("search"))
+                        : itm,
+                    )
+                    ?.map((item) => {
+                      return (
+                        <div
+                          className={`flex gap-2 border rounded-md px-2 py-1.5 cursor-pointer hover:bg-black/5 ${methods.watch("relative") == item?.value && "bg-black/20 text-primary font-semibold border-primary hover:bg-black/20"}`}
+                          onClick={() => {
+                            methods.setValue("relative", item?.value);
+                          }}
+                        >
+                          <User />
+                          <span>{item?.label}</span>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+              <div className="grid w-full grid-cols-2 gap-4 h-[200px]">
+                {relationOptions?.map((item) => {
+                  return (
+                    <div
+                      className={`flex w-full flex-col gap-2 items-center justify-center border rounded-md px-4 py-2 cursor-pointer shadow-md hover:bg-black/5 hover:shadow-none ${methods.watch("relation") == item?.value && "bg-black/20 text-primary font-semibold border-primary hover:bg-black/20 hover:shadow-none"}`}
+                      onClick={() => {
+                        methods.setValue("relation", item?.value);
+                      }}
+                    >
+                      {/* {item?.label === "Father" ? (
                       <img
                         src={men}
                         className="w-[40px] h-[40px] rounded-full object-cover mb-1"
@@ -138,29 +139,23 @@ const LinkMemberForm = ({
                       <User size={30} />
                     )} */}
 
-                    <User size={30} />
+                      <User size={30} />
 
-                    <span>{item?.label}</span>
-                  </div>
-                );
-              })}
+                      <span>{item?.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
           {hasSelectedValues && (
-            <div className="flex flex-col text-sm gap-3 border mt-3 px-3 py-3 rounded-md">
-              <span>Preview</span>
+            <div className="flex flex-col text-sm gap-3 border shadow-md mt-1 px-3 py-3 rounded-md">
+              <span className="font-semibold">Preview</span>
 
               <div className="flex w-full justify-between items-center">
-                <div className="flex gap-2 min-h-[100px] min-w-[100px] flex-col text-center items-center justify-center w-min px-2 py-1 border rounded-md">
-                  <User />{" "}
-                  <span>
-                    {
-                      relativeOptions?.find(
-                        (itm) => itm?.value == methods.watch("relative"),
-                      )?.label
-                    }
-                  </span>
+                <div className="flex gap-2 min-h-[100px] min-w-[100px] flex-col text-center items-center justify-center w-min px-2 py-1 border shadow-md rounded-md">
+                  <User /> <span>{popup?.data?.name}</span>
                 </div>
                 <div className="flex gap-1 items-center">
                   <span>will be linked</span>
@@ -176,13 +171,20 @@ const LinkMemberForm = ({
                     {" of"}
                   </span>
                 </div>
-                <div className="flex gap-2 min-h-[100px] min-w-[100px] flex-col text-center items-center justify-center w-min px-2 py-1 border rounded-md">
-                  <User /> <span>{popup?.data?.name}</span>
+                <div className="flex gap-2 min-h-[100px] min-w-[100px] flex-col text-center items-center justify-center w-min px-2 py-1 border shadow-md rounded-md">
+                  <User />{" "}
+                  <span>
+                    {
+                      relativeOptions?.find(
+                        (itm) => itm?.value == methods.watch("relative"),
+                      )?.label
+                    }
+                  </span>
                 </div>
               </div>
             </div>
           )}
-          <div className="flex-col gap-2 mt-3">
+          <div className="flex-col gap-2 mt-1">
             <Button
               variant="secondary"
               className="w-full"
