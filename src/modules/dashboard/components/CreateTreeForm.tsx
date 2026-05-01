@@ -27,7 +27,8 @@ export function CreateTreeForm({ setPopup }: { setPopup?: any }) {
         <Card className="w-full bg-white p-5 gap-3">
           <p>Create New Family Tree</p>
 
-          <hr className="text-gray-300" />
+          <hr className="text-gray-300 w-[calc(100%+40px)] -ml-5" />
+
           <div>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">

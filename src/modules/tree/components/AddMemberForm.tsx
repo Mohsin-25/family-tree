@@ -18,6 +18,7 @@ type PersonFormValues = {
   maritalStatus: "S" | "M";
   profession: string;
   photo?: string;
+  removePhoto?: "Y" | "N";
 };
 
 export function AddMemberForm({
@@ -30,11 +31,12 @@ export function AddMemberForm({
   const methods = useForm<PersonFormValues>({
     defaultValues: {
       name: "",
-      gender: undefined,
+      gender: "M",
       dob: "1900-01-01",
-      maritalStatus: undefined,
+      maritalStatus: "S",
       profession: "",
       photo: "",
+      removePhoto: "N",
     },
   });
 
@@ -64,6 +66,7 @@ export function AddMemberForm({
     payload.append("dob", data?.dob);
     payload.append("maritalStatus", data?.maritalStatus);
     payload.append("profession", data?.profession);
+    payload.append("removePhoto", data?.removePhoto || "N");
 
     const file = data?.photo?.[0];
     if (file) {
@@ -85,7 +88,7 @@ export function AddMemberForm({
         dob: memberDataToPrefill?.dob,
         maritalStatus: memberDataToPrefill?.maritalStatus || null,
         profession: memberDataToPrefill?.profession,
-        photo: memberDataToPrefill?.photoUrl,
+        photo: memberDataToPrefill?.photo?.url,
       });
     }
   }, [memberIdToBeUpdated]);
@@ -95,14 +98,18 @@ export function AddMemberForm({
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <Card className="w-full bg-white p-5 gap-3">
           {popup?.form === "editMember" ? (
-            <p>Edit {popup?.data?.data?.name}</p>
+            <p>
+              Edit <span className="font-bold">{popup?.data?.data?.name}</span>
+              's details
+            </p>
           ) : (
-            <p>Add New Member</p>
+            <p>Add new member</p>
           )}
 
-          <hr className="text-gray-300" />
+          <hr className="text-gray-300 w-[calc(100%+40px)] -ml-5" />
+
           <div>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
               {/* <div className="grid grid-cols-3">
                 <div className="w-min">
                   <Uploader
@@ -127,7 +134,7 @@ export function AddMemberForm({
               <div className="grid gap-2">
                 <Uploader
                   methods={methods}
-                  defaultImage={memberDataToPrefill?.photoUrl}
+                  defaultImage={memberDataToPrefill?.photo?.url}
                 />
                 <label className="w-fit" htmlFor="name">
                   Name

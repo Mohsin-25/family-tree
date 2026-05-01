@@ -11,7 +11,10 @@ import LazyLoader from "../../../components/ui/Loader";
 
 type FamilyNode = RawNodeDatum & {
   type: "single" | "couple";
-  photoUrl?: string;
+  photo?: {
+    url?: String;
+    publicId?: String;
+  };
   person?: {
     id: string;
     data: any;
@@ -62,7 +65,6 @@ const TestSix = ({
   const getStructuredPerson = (obj: any): FamilyNode => {
     return {
       name: obj?.name,
-      photoUrl: obj?.photoUrl || "",
       type: obj?.spouse ? "couple" : "single",
       person: {
         id: obj?._id,
@@ -234,7 +236,7 @@ const SingleNode = ({
     >
       <button
         title="Edit Person"
-        className="text-primary/60 hover:text-primary hidden group-hover:flex items-center justify-center rounded-full absolute right-2 top-2 cursor-pointer"
+        className="text-primary/60 hover:text-primary opacity-0 group-hover:opacity-100 items-center justify-center rounded-full absolute right-2 top-2 cursor-pointer transition-all duration-300 ease-in-out"
         onClick={(e) => {
           e.stopPropagation();
           setPopup({ data: person, state: true, form: "editMember" });
@@ -244,9 +246,10 @@ const SingleNode = ({
       </button>
       <img
         src={
-          person?.data?.photoUrl || (person?.data?.gender === "F" ? women : men)
+          person?.data?.photo?.url ||
+          (person?.data?.gender === "F" ? women : men)
         }
-        className="w-[70px] h-[70px] rounded-full object-cover mb-1"
+        className="w-[70px] h-[70px] group-hover:w-[120px] group-hover:h-[120px] rounded-full object-cover mb-1 transition-all duration-300 ease-in-out"
       />
       <p className="text-sm font-medium">{person?.data?.name}</p>
 
@@ -281,7 +284,7 @@ const SingleNode = ({
           className="text-primary/60 bg-white p-2 hover:text-primary items-center justify-center rounded-full absolute right-1 -bottom-3 cursor-pointer"
         >
           {isMarkAsRootPersonPending ? (
-            <Spinner className="!size-7" loading />
+            <Spinner className="size-7!" loading />
           ) : (
             <Sprout size={32} />
           )}

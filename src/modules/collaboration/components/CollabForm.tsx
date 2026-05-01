@@ -50,7 +50,7 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Card className="w-full bg-white p-5 gap-3">
-            <p className="font-[500]">Collaborators</p>
+            <p className="font-medium">Collaborators</p>
             <p className="text-[14px] -mt-2 text-gray-500">
               Share this tree with others and work together
             </p>
@@ -61,7 +61,7 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
               <div className="flex items-center gap-4">
                 <Link className="size-10 border border-primary/10 bg-primary/5 rounded-full text-primary p-2" />
                 <div className="flex flex-col">
-                  <p className="font-[500]">Generate Invitation Link</p>
+                  <p className="font-medium">Generate Invitation Link</p>
                   <p className="text-[14px] text-gray-500">
                     Anyone with this link can view or join this tree
                   </p>
@@ -96,8 +96,17 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
 
             <hr className="text-gray-300 w-[calc(100%+40px)] -ml-5 mt-3" />
 
-            <span className="ml-3 text-sm font-[500]">
-              Collaborators ({members?.length})
+            <span className="flex gap-1 items-center ml-3 text-sm font-medium">
+              Collaborators{" "}
+              {isTreeMembersLoading ? (
+                <Spinner loading />
+              ) : (
+                <span>
+                  {"("}
+                  {members?.length}
+                  {")"}
+                </span>
+              )}
             </span>
             <Table.Root>
               <Table.Header className="border-t bg-gray-200">
