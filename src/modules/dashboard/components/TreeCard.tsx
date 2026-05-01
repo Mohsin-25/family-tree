@@ -4,8 +4,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import {
   CalendarDays,
   Crown,
-  Eye,
   Plus,
+  ScanEye,
   Trash,
   Trees,
   UserPen,
@@ -34,6 +34,22 @@ const TreeCard = ({ item }: { item: any }) => {
           alt="family photo"
           className="rounded-t-lg object-cover group-hover:scale-105 transition-transform duration-500"
         />
+        <div
+          className={`flex absolute top-0 right-0 px-2 py-1 rounded-bl-lg ${item?.role === "OWNER" ? "bg-green-300" : item?.role === "VIEWER" ? "bg-yellow-300" : item?.role === "EDITOR" ? "bg-blue-300" : "bg-red-300"}`}
+        >
+          <span className="flex gap-2 items-center" title={item?.role}>
+            {/* <span className="text-sm text-black lowercase">{item?.role}</span> */}
+            {item?.role === "OWNER" && (
+              <Crown size={16} className="text-black" />
+            )}
+            {item?.role === "VIEWER" && (
+              <ScanEye size={16} className="text-black" />
+            )}
+            {item?.role === "EDITOR" && (
+              <UserPen size={16} className="text-black" />
+            )}
+          </span>
+        </div>{" "}
         <span className="absolute bottom-3 left-3 text-white font-bold text-2xl">
           {item?.title}
         </span>
@@ -41,7 +57,7 @@ const TreeCard = ({ item }: { item: any }) => {
 
       <div className="p-4 flex flex-col gap-4">
         <span className="text-sm">{item?.description}</span>
-        <div className="flex">
+        {/* <div className="flex">
           <span className="flex gap-2 items-center">
             {item?.role === "OWNER" && (
               <Crown size={16} className="text-muted-foreground" />
@@ -56,7 +72,7 @@ const TreeCard = ({ item }: { item: any }) => {
               {item?.role}
             </span>
           </span>
-        </div>{" "}
+        </div>{" "} */}
         <div className="flex justify-between">
           <span className="flex gap-2 items-center">
             <Users size={16} className="text-muted-foreground" />
