@@ -24,7 +24,7 @@ export const useCreateTree = ({ setPopup }: { setPopup?: any }) => {
   const { mutate, isPending } = useMutation({
     mutationFn: (payload: { title: string; description: string }) =>
       httpRequest({
-        url: "/trees/",
+        url: "/trees",
         method: httpMethods.post,
         payload,
       }),
@@ -61,7 +61,7 @@ export const useDeleteTree = ({ treeId }: { treeId?: any }) => {
   const { mutate, isPending } = useMutation({
     mutationFn: () =>
       httpRequest({
-        url: `/trees/${treeId}/deleteTree`,
+        url: `/trees/${treeId}`,
         method: httpMethods.delete,
       }),
     onSuccess: (res) => {
@@ -73,6 +73,82 @@ export const useDeleteTree = ({ treeId }: { treeId?: any }) => {
       if (res?.status) {
         queryClient.invalidateQueries({
           queryKey: ["userTrees"],
+        });
+      }
+    },
+    onError: (err: any) => {
+      if (err?.message) {
+        showToast({
+          description: err?.message,
+          status: err?.status,
+        });
+      }
+    },
+  });
+
+  return { mutate, isPending };
+};
+
+export const useLeaveTree = ({ treeId }: { treeId?: any }) => {
+  const queryClient = useQueryClient();
+  const { showToast } = useAppToast();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: () =>
+      httpRequest({
+        url: `/trees/${treeId}/members/me`,
+        method: httpMethods.delete,
+      }),
+    onSuccess: (res) => {
+      showToast({
+        description: res?.message,
+        status: res?.status,
+      });
+
+      if (res?.status) {
+        queryClient.invalidateQueries({
+          queryKey: ["userTrees"],
+        });
+      }
+    },
+    onError: (err: any) => {
+      if (err?.message) {
+        showToast({
+          description: err?.message,
+          status: err?.status,
+        });
+      }
+    },
+  });
+
+  return { mutate, isPending };
+};
+
+export const useRemoveMemberFromTree = ({
+  treeId,
+  userId,
+}: {
+  treeId?: any;
+  userId?: any;
+}) => {
+  const queryClient = useQueryClient();
+  const { showToast } = useAppToast();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: () =>
+      httpRequest({
+        url: `/trees/${treeId}/members/${userId}`,
+        method: httpMethods.delete,
+      }),
+    onSuccess: (res) => {
+      showToast({
+        description: res?.message,
+        status: res?.status,
+      });
+
+      if (res?.status) {
+        queryClient.invalidateQueries({
+          queryKey: ["treeMembers"],
         });
       }
     },

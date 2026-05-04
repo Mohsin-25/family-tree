@@ -8,6 +8,7 @@ import { Spinner } from "@radix-ui/themes";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAppToast } from "../../../components/Toast";
 import LazyLoader from "../../../components/ui/Loader";
+import { useEffect } from "react";
 
 type FamilyNode = RawNodeDatum & {
   type: "single" | "couple";
@@ -42,6 +43,13 @@ const TestSix = ({
     isLoading: isTreeDataLoading,
     isFetching,
   } = getFamilyTree(id);
+
+  const treeRole = localStorage.getItem("treeRole");
+
+  useEffect(() => {
+    if (treeData?.member?.role && treeData?.member?.role !== treeRole)
+      localStorage.setItem("treeRole", treeData?.member?.role);
+  }, [treeData?.member?.role]);
 
   if (isTreeDataLoading) {
     return (
@@ -116,7 +124,7 @@ const TestSix = ({
         zoomable={true} // enable mousewheel zoom
         draggable={true} // enable click+drag panning
         translate={{ x: 700, y: 100 }} // initial position
-        zoom={0.5} // initial zoom level
+        zoom={0.6} // initial zoom level
         nodeSize={{ x: 300, y: 300 }}
         onNodeClick={() => alert("yeet")}
         separation={{ siblings: 2, nonSiblings: 2 }}
@@ -228,22 +236,29 @@ const SingleNode = ({
     });
   };
 
+  const treeRole = localStorage.getItem("treeRole");
+
+  const isOwner = treeRole === "OWNER";
+  const isEditor = treeRole === "EDITOR";
+
   return person ? (
     <div
       className={`relative bg-white group border px-4 py-6 rounded-xl shadow-md flex flex-col items-center justify-center w-[200px] h-[180px] cursor-auto ${
         isSpouse && "bg-blue-100!"
       }`}
     >
-      <button
-        title="Edit Person"
-        className="text-primary/60 hover:text-primary opacity-0 group-hover:opacity-100 items-center justify-center rounded-full absolute right-2 top-2 cursor-pointer transition-all duration-300 ease-in-out"
-        onClick={(e) => {
-          e.stopPropagation();
-          setPopup({ data: person, state: true, form: "editMember" });
-        }}
-      >
-        <Edit size={32} />
-      </button>
+      {(isOwner || isEditor) && (
+        <button
+          title="Edit Person"
+          className="text-primary/60 hover:text-primary opacity-0 group-hover:opacity-100 items-center justify-center rounded-full absolute right-2 top-2 cursor-pointer transition-all duration-300 ease-in-out"
+          onClick={(e) => {
+            e.stopPropagation();
+            setPopup({ data: person, state: true, form: "editMember" });
+          }}
+        >
+          <Edit size={32} />
+        </button>
+      )}
       <img
         src={
           person?.data?.photo?.url ||

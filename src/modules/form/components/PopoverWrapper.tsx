@@ -8,18 +8,17 @@ const PopoverWrapper = ({
   open,
   onOpenChange,
   children,
+  triggerBtn,
 }: {
   open?: any;
   onOpenChange?: any;
   children?: any;
+  triggerBtn?: any;
 }) => {
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       {/* Hidden anchor element */}
-      <PopoverTrigger asChild>
-        <span className="hidden w-full h-full" />
-      </PopoverTrigger>
-
+      <PopoverTrigger asChild>{triggerBtn()}</PopoverTrigger>
       <PopoverContent className="w-auto">{children}</PopoverContent>
     </Popover>
   );

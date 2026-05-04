@@ -4,6 +4,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import {
   CalendarDays,
   Crown,
+  LogOut,
   Plus,
   ScanEye,
   Trash,
@@ -15,13 +16,19 @@ import { useState } from "react";
 import { Button } from "../../../components/ui/button";
 import PopupWrapper from "../../form/components/PopupWrapper";
 import { CreateTreeForm } from "./CreateTreeForm";
-import { useDeleteTree } from "../services/service";
+import { useDeleteTree, useLeaveTree } from "../services/service";
 dayjs.extend(relativeTime);
 
 const TreeCard = ({ item }: { item: any }) => {
   const navigate = useNavigate();
 
   const { mutate, isPending } = useDeleteTree({ treeId: item?.treeId });
+  const { mutate: leaveTreeMutate, isPending: isLeaveTreePending } =
+    useLeaveTree({ treeId: item?.treeId });
+
+  const isOwner = item?.role === "OWNER";
+  const isEditor = item?.role === "EDITOR";
+  const isViewer = item?.role === "VIEWER";
 
   return (
     <div className="bg-white flex flex-col overflow-hidden w-[280px] min-h-[380px] border border-extraLightGray rounded-lg shadow-lg group">
@@ -35,19 +42,13 @@ const TreeCard = ({ item }: { item: any }) => {
           className="rounded-t-lg object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div
-          className={`flex absolute top-0 right-0 px-2 py-1 rounded-bl-lg ${item?.role === "OWNER" ? "bg-green-300" : item?.role === "VIEWER" ? "bg-yellow-300" : item?.role === "EDITOR" ? "bg-blue-300" : "bg-red-300"}`}
+          className={`flex absolute top-0 right-0 px-2.5 py-2 rounded-bl-lg ${isOwner ? "bg-green-300" : isViewer ? "bg-yellow-200" : isEditor ? "bg-blue-300" : "bg-red-300"}`}
         >
           <span className="flex gap-2 items-center" title={item?.role}>
             {/* <span className="text-sm text-black lowercase">{item?.role}</span> */}
-            {item?.role === "OWNER" && (
-              <Crown size={16} className="text-black" />
-            )}
-            {item?.role === "VIEWER" && (
-              <ScanEye size={16} className="text-black" />
-            )}
-            {item?.role === "EDITOR" && (
-              <UserPen size={16} className="text-black" />
-            )}
+            {isOwner && <Crown size={16} className="text-black" />}
+            {isViewer && <ScanEye size={16} className="text-black" />}
+            {isEditor && <UserPen size={16} className="text-black" />}
           </span>
         </div>{" "}
         <span className="absolute bottom-3 left-3 text-white font-bold text-2xl">
@@ -109,13 +110,13 @@ const TreeCard = ({ item }: { item: any }) => {
         </Button>
         <Button
           variant={"outline"}
-          loading={isPending}
+          loading={isPending || isLeaveTreePending}
           replaceWithSpinner
-          onClick={() => mutate()}
+          onClick={() => (isOwner ? mutate() : leaveTreeMutate())}
           className="text-red-500"
-          title="Delete tree"
+          title={isOwner ? "Delete tree" : "Leave tree"}
         >
-          <Trash />
+          {isOwner ? <Trash /> : <LogOut />}
         </Button>
       </div>
     </div>

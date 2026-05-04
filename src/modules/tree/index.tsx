@@ -23,13 +23,18 @@ const MyTree = () => {
 
   const { treeData } = getFamilyTree(id);
 
+  const treeRole = localStorage.getItem("treeRole");
+
+  const isOwner = treeRole === "OWNER";
+  const isEditor = treeRole === "EDITOR";
+
   return (
     <div>
       <FamilyTree setPopup={setPopup} popup={popup} />
 
       <MemberCountStatus treeData={treeData} setPopup={setPopup} />
 
-      <AddMember setPopup={setPopup} />
+      {(isOwner || isEditor) && <AddMember setPopup={setPopup} />}
 
       <LinkMember setPopup={setPopup} popup={popup} />
 
@@ -82,6 +87,11 @@ const MemberCountStatus = ({
     mutate: markAsRootPersonMutation,
     isPending: isMarkAsRootPersonPending,
   } = useMarkAsRootPerson();
+
+  const treeRole = localStorage.getItem("treeRole");
+
+  const isOwner = treeRole === "OWNER";
+  const isEditor = treeRole === "EDITOR";
 
   return (
     <Menubar.Root className="flex">
@@ -186,20 +196,22 @@ const MemberCountStatus = ({
                       }}
                     >
                       <span>{item?.name}</span>
-                      <span
-                        title="Link with tree"
-                        className="cursor-pointer"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setPopup({
-                            data: item,
-                            state: true,
-                            form: "linkMember",
-                          });
-                        }}
-                      >
-                        <Link size={18} />
-                      </span>
+                      {(isOwner || isEditor) && (
+                        <span
+                          title="Link with tree"
+                          className="cursor-pointer"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPopup({
+                              data: item,
+                              state: true,
+                              form: "linkMember",
+                            });
+                          }}
+                        >
+                          <Link size={18} />
+                        </span>
+                      )}
                     </Menubar.Item>
                   </div>
                 );

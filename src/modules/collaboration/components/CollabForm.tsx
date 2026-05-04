@@ -1,6 +1,14 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { Card } from "../../../components/ui/card";
-import { Copy, EllipsisVertical, Link } from "lucide-react";
+import {
+  Copy,
+  Crown,
+  EllipsisVertical,
+  Link,
+  ScanEye,
+  UserPen,
+  Users,
+} from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import { Spinner, Table } from "@radix-ui/themes";
 import { useGenerateInviteToken, useGetTreeMembers } from "../services/service";
@@ -45,59 +53,72 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
     }
   }
 
+  const treeRole = localStorage.getItem("treeRole");
+
+  const isOwner = treeRole === "OWNER";
+  const isEditor = treeRole === "EDITOR";
+
   return (
     <div className="">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Card className="w-full bg-white p-5 gap-3">
             <p className="font-medium">Collaborators</p>
-            <p className="text-[14px] -mt-2 text-gray-500">
-              Share this tree with others and work together
-            </p>
+            {(isOwner || isEditor) && (
+              <>
+                <p className="text-[14px] -mt-2 text-gray-500">
+                  Share this tree with others and work together
+                </p>
 
-            <hr className="text-gray-300 w-[calc(100%+40px)] -ml-5" />
+                <hr className="text-gray-300 w-[calc(100%+40px)] -ml-5" />
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <Link className="size-10 border border-primary/10 bg-primary/5 rounded-full text-primary p-2" />
-                <div className="flex flex-col">
-                  <p className="font-medium">Generate Invitation Link</p>
-                  <p className="text-[14px] text-gray-500">
-                    Anyone with this link can view or join this tree
-                  </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <Link className="size-10 border border-primary/10 bg-primary/5 rounded-full text-primary p-2" />
+                    <div className="flex flex-col">
+                      <p className="font-medium">Generate Invitation Link</p>
+                      <p className="text-[14px] text-gray-500">
+                        Anyone with this link can view or join this tree
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => generateInviteTokenMutate({ treeId: id })}
+                    disabled={isGenerateInviteTokenPending}
+                  >
+                    {isGenerateInviteTokenPending ? (
+                      <Spinner loading />
+                    ) : (
+                      <Link />
+                    )}
+                    Generate Invitation Link
+                  </Button>
                 </div>
-              </div>
-              <Button
-                onClick={() => generateInviteTokenMutate({ treeId: id })}
-                disabled={isGenerateInviteTokenPending}
-              >
-                {isGenerateInviteTokenPending ? <Spinner loading /> : <Link />}
-                Generate Invitation Link
-              </Button>
-            </div>
-            {token && (
-              <div className="flex gap-4 items-center">
-                <span
-                  id="invitationLink"
-                  className="text-sm border rounded-md px-3 py-2"
-                >
-                  {url}
-                </span>
-                <Button
-                  id="copyLink"
-                  onClick={() => copyToClipboard(url)}
-                  variant="outline"
-                >
-                  <Copy />
-                  Copy Link
-                </Button>
-              </div>
+                {token && (
+                  <div className="flex gap-4 items-center">
+                    <span
+                      id="invitationLink"
+                      className="text-sm border rounded-md px-3 py-2"
+                    >
+                      {url}
+                    </span>
+                    <Button
+                      id="copyLink"
+                      onClick={() => copyToClipboard(url)}
+                      variant="outline"
+                    >
+                      <Copy />
+                      Copy Link
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
 
             <hr className="text-gray-300 w-[calc(100%+40px)] -ml-5 mt-3" />
 
             <span className="flex gap-1 items-center ml-3 text-sm font-medium">
-              Collaborators{" "}
+              <Users className="mr-2" size={18} /> Collaborators{" "}
               {isTreeMembersLoading ? (
                 <Spinner loading />
               ) : (
@@ -121,16 +142,37 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
               {!isTreeMembersLoading && (
                 <Table.Body>
                   {members?.map((item: any, index: any) => {
-                    const isOwner =
+                    const isLoggedInUser =
                       localStorage.getItem("fullName") ==
                       item?.userId?.fullName;
+
+                    const isOwner = item?.role === "OWNER";
+                    const isEditor = item?.role === "EDITOR";
+                    const isViewer = item?.role === "VIEWER";
+
                     return (
                       <Table.Row key={index}>
                         <Table.RowHeaderCell>
-                          {item?.userId?.fullName} {isOwner ? "(You)" : ""}
+                          {item?.userId?.fullName}{" "}
+                          <span className="font-bold">
+                            {isLoggedInUser ? "(You)" : ""}
+                          </span>
                         </Table.RowHeaderCell>
-                        <Table.RowHeaderCell className="lowercase">
-                          {item?.role}
+                        <Table.RowHeaderCell>
+                          <span
+                            className={`lowercase px-2 py-1 rounded-md flex gap-2 w-min justify-center items-center ${isOwner ? "bg-green-300!" : isViewer ? "bg-yellow-200!" : isEditor ? "bg-blue-300!" : "bg-red-300!"}`}
+                          >
+                            {isOwner && (
+                              <Crown size={16} className="text-black" />
+                            )}
+                            {isViewer && (
+                              <ScanEye size={16} className="text-black" />
+                            )}
+                            {isEditor && (
+                              <UserPen size={16} className="text-black" />
+                            )}
+                            <span>{item?.role}</span>
+                          </span>
                         </Table.RowHeaderCell>
                         <Table.RowHeaderCell>
                           {dayjs(item?.createdAt).format(
