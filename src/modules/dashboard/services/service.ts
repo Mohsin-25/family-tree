@@ -124,21 +124,52 @@ export const useLeaveTree = ({ treeId }: { treeId?: any }) => {
   return { mutate, isPending };
 };
 
-export const useRemoveMemberFromTree = ({
-  treeId,
-  userId,
-}: {
-  treeId?: any;
-  userId?: any;
-}) => {
+export const useRemoveMemberFromTree = ({ treeId }: { treeId?: any }) => {
+  const queryClient = useQueryClient();
+  const { showToast } = useAppToast();
+
+  const { mutate, isPending, reset } = useMutation({
+    mutationFn: (payload: { userId?: string }) =>
+      httpRequest({
+        url: `/trees/${treeId}/members/${payload?.userId}`,
+        method: httpMethods.delete,
+      }),
+    onSuccess: (res) => {
+      showToast({
+        description: res?.message,
+        status: res?.status,
+      });
+
+      if (res?.status) {
+        reset();
+        queryClient.invalidateQueries({
+          queryKey: ["treeMembers"],
+        });
+      }
+    },
+    onError: (err: any) => {
+      if (err?.message) {
+        showToast({
+          description: err?.message,
+          status: err?.status,
+        });
+      }
+    },
+  });
+
+  return { mutate, isPending };
+};
+
+export const useUpdateMemberRoleForTree = ({ treeId }: { treeId?: any }) => {
   const queryClient = useQueryClient();
   const { showToast } = useAppToast();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: () =>
+    mutationFn: (payload: { memberId: string; role: string }) =>
       httpRequest({
-        url: `/trees/${treeId}/members/${userId}`,
-        method: httpMethods.delete,
+        url: `/trees/${treeId}/members/${payload?.memberId}`,
+        method: httpMethods.put,
+        payload: { role: payload?.role },
       }),
     onSuccess: (res) => {
       showToast({

@@ -10,10 +10,20 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "../../../components/ui/button";
-import { Spinner, Table } from "@radix-ui/themes";
+import { Spinner, Table, Theme } from "@radix-ui/themes";
 import { useGenerateInviteToken, useGetTreeMembers } from "../services/service";
 import { useParams } from "@tanstack/react-router";
 import dayjs from "dayjs";
+import {
+  Popover,
+  PopoverContent,
+  PopoverPortal,
+  PopoverTrigger,
+} from "@radix-ui/react-popover";
+import {
+  useRemoveMemberFromTree,
+  useUpdateMemberRoleForTree,
+} from "../../dashboard/services/service";
 
 const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
   const methods = useForm();
@@ -27,6 +37,20 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
 
   const { members, isLoading: isTreeMembersLoading } = useGetTreeMembers({
     id,
+  });
+
+  const {
+    mutate: removeMemberFromTreeMutate,
+    isPending: isRemoveMemberFromTreePending,
+  } = useRemoveMemberFromTree({
+    treeId: id,
+  });
+
+  const {
+    mutate: updateMemberRoleMutate,
+    isPending: isUpdateMemberRolePending,
+  } = useUpdateMemberRoleForTree({
+    treeId: id,
   });
 
   console.log({ setPopup, popup, members });
@@ -83,7 +107,12 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
                     </div>
                   </div>
                   <Button
-                    onClick={() => generateInviteTokenMutate({ treeId: id })}
+                    onClick={() =>
+                      generateInviteTokenMutate({
+                        treeId: id,
+                        expiresAt: dayjs().add(1, "hour").toDate(),
+                      })
+                    }
                     disabled={isGenerateInviteTokenPending}
                   >
                     {isGenerateInviteTokenPending ? (
@@ -96,16 +125,22 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
                 </div>
                 {token && (
                   <div className="flex gap-4 items-center">
-                    <span
-                      id="invitationLink"
-                      className="text-sm border rounded-md px-3 py-2"
-                    >
-                      {url}
-                    </span>
+                    <div className="flex flex-col">
+                      <span
+                        id="invitationLink"
+                        className="text-sm border rounded-md px-3 py-2"
+                      >
+                        {url}
+                      </span>
+                      <span className="text-[10px] text-red-500 ml-3.5">
+                        Link expires in 1 hour
+                      </span>
+                    </div>
                     <Button
                       id="copyLink"
                       onClick={() => copyToClipboard(url)}
                       variant="outline"
+                      className="mb-auto"
                     >
                       <Copy />
                       Copy Link
@@ -129,46 +164,47 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
                 </span>
               )}
             </span>
-            <Table.Root>
+            <Table.Root className="max-h-[280px] overflow-y-auto!">
               <Table.Header className="border-t bg-gray-200">
                 <Table.Row>
                   <Table.ColumnHeaderCell>Members</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Role</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Joined</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Invited By</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Action</Table.ColumnHeaderCell>
                 </Table.Row>
               </Table.Header>
 
               {!isTreeMembersLoading && (
-                <Table.Body>
+                <Table.Body className="">
                   {members?.map((item: any, index: any) => {
                     const isLoggedInUser =
                       localStorage.getItem("fullName") ==
                       item?.userId?.fullName;
 
-                    const isOwner = item?.role === "OWNER";
-                    const isEditor = item?.role === "EDITOR";
-                    const isViewer = item?.role === "VIEWER";
+                    const isMemberOwner = item?.role === "OWNER";
+                    const isMemberEditor = item?.role === "EDITOR";
+                    const isMemberViewer = item?.role === "VIEWER";
 
                     return (
                       <Table.Row key={index}>
                         <Table.RowHeaderCell>
-                          {item?.userId?.fullName}{" "}
+                          <span>{item?.userId?.fullName} </span>
                           <span className="font-bold">
                             {isLoggedInUser ? "(You)" : ""}
                           </span>
                         </Table.RowHeaderCell>
                         <Table.RowHeaderCell>
                           <span
-                            className={`lowercase px-2 py-1 rounded-md flex gap-2 w-min justify-center items-center ${isOwner ? "bg-green-300!" : isViewer ? "bg-yellow-200!" : isEditor ? "bg-blue-300!" : "bg-red-300!"}`}
+                            className={`lowercase px-2 py-1 rounded-md flex gap-2 w-min justify-center items-center ${isMemberOwner ? "bg-green-300!" : isMemberViewer ? "bg-yellow-200!" : isMemberEditor ? "bg-blue-300!" : "bg-red-300!"}`}
                           >
-                            {isOwner && (
+                            {isMemberOwner && (
                               <Crown size={16} className="text-black" />
                             )}
-                            {isViewer && (
+                            {isMemberViewer && (
                               <ScanEye size={16} className="text-black" />
                             )}
-                            {isEditor && (
+                            {isMemberEditor && (
                               <UserPen size={16} className="text-black" />
                             )}
                             <span>{item?.role}</span>
@@ -180,7 +216,91 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
                           )}
                         </Table.RowHeaderCell>
                         <Table.RowHeaderCell>
-                          <EllipsisVertical className="size-4 mt-0.5 mr-2 ml-1 cursor-pointer" />
+                          {item?.invitedBy?.fullName || "- - -"}
+                        </Table.RowHeaderCell>
+                        <Table.RowHeaderCell>
+                          {isOwner ? (
+                            <Popover>
+                              {!isMemberOwner ? (
+                                <PopoverTrigger asChild>
+                                  <EllipsisVertical className="size-4 mt-0.5 mr-2 ml-1 cursor-pointer" />
+                                </PopoverTrigger>
+                              ) : (
+                                "- - -"
+                              )}
+                              <PopoverPortal>
+                                <Theme>
+                                  <PopoverContent
+                                    className="relative z-100 rounded-md flex flex-col border bg-white shadow-lg p-2 gap-2 mr-2"
+                                    side="left"
+                                  >
+                                    <span className="bg-white border-r border-t size-3 absolute rotate-45 -right-1.5 top-[50%] bottom-[50%]"></span>
+                                    {isMemberViewer && (
+                                      <Button
+                                        variant={"outline"}
+                                        className="text-[12px] px-2 bg-gray-200"
+                                        onClick={() => {
+                                          updateMemberRoleMutate({
+                                            memberId: item?.userId?._id,
+                                            role: "EDITOR",
+                                          });
+                                        }}
+                                        disabled={isUpdateMemberRolePending}
+                                      >
+                                        {isUpdateMemberRolePending ? (
+                                          <Spinner loading />
+                                        ) : (
+                                          ""
+                                        )}
+                                        Provide Edit Access
+                                      </Button>
+                                    )}
+                                    {isMemberEditor && (
+                                      <Button
+                                        variant={"outline"}
+                                        className="text-[12px] px-2 bg-gray-200"
+                                        onClick={() => {
+                                          updateMemberRoleMutate({
+                                            memberId: item?.userId?._id,
+                                            role: "VIEWER",
+                                          });
+                                        }}
+                                        disabled={isUpdateMemberRolePending}
+                                      >
+                                        {isUpdateMemberRolePending ? (
+                                          <Spinner loading />
+                                        ) : (
+                                          ""
+                                        )}
+                                        Remove Edit Access
+                                      </Button>
+                                    )}
+                                    {isOwner && (
+                                      <Button
+                                        variant={"outline"}
+                                        className="text-[12px] px-2 bg-gray-200"
+                                        onClick={() => {
+                                          removeMemberFromTreeMutate({
+                                            userId: item?.userId?._id,
+                                          });
+                                        }}
+                                        disabled={isRemoveMemberFromTreePending}
+                                      >
+                                        {isRemoveMemberFromTreePending ? (
+                                          <Spinner loading />
+                                        ) : (
+                                          ""
+                                        )}
+                                        Remove From Tree
+                                      </Button>
+                                    )}
+                                  </PopoverContent>
+                                </Theme>
+                              </PopoverPortal>
+                            </Popover>
+                          ) : (
+                            "- - -"
+                          )}
                         </Table.RowHeaderCell>
                       </Table.Row>
                     );
