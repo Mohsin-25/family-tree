@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignInRouteImport } from './routes/signIn'
+import { Route as ForgotPasswordRouteImport } from './routes/forgotPassword'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MyTreeIdRouteImport } from './routes/myTree/$id'
@@ -18,6 +19,11 @@ import { Route as InviteTokenIdRouteImport } from './routes/inviteToken/$id'
 const SignInRoute = SignInRouteImport.update({
   id: '/signIn',
   path: '/signIn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgotPassword',
+  path: '/forgotPassword',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -44,6 +50,7 @@ const InviteTokenIdRoute = InviteTokenIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/forgotPassword': typeof ForgotPasswordRoute
   '/signIn': typeof SignInRoute
   '/inviteToken/$id': typeof InviteTokenIdRoute
   '/myTree/$id': typeof MyTreeIdRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/forgotPassword': typeof ForgotPasswordRoute
   '/signIn': typeof SignInRoute
   '/inviteToken/$id': typeof InviteTokenIdRoute
   '/myTree/$id': typeof MyTreeIdRoute
@@ -59,19 +67,33 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/forgotPassword': typeof ForgotPasswordRoute
   '/signIn': typeof SignInRoute
   '/inviteToken/$id': typeof InviteTokenIdRoute
   '/myTree/$id': typeof MyTreeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/signIn' | '/inviteToken/$id' | '/myTree/$id'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/forgotPassword'
+    | '/signIn'
+    | '/inviteToken/$id'
+    | '/myTree/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/signIn' | '/inviteToken/$id' | '/myTree/$id'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/forgotPassword'
+    | '/signIn'
+    | '/inviteToken/$id'
+    | '/myTree/$id'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/forgotPassword'
     | '/signIn'
     | '/inviteToken/$id'
     | '/myTree/$id'
@@ -80,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   SignInRoute: typeof SignInRoute
   InviteTokenIdRoute: typeof InviteTokenIdRoute
   MyTreeIdRoute: typeof MyTreeIdRoute
@@ -92,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/signIn'
       fullPath: '/signIn'
       preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgotPassword': {
+      id: '/forgotPassword'
+      path: '/forgotPassword'
+      fullPath: '/forgotPassword'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -128,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   SignInRoute: SignInRoute,
   InviteTokenIdRoute: InviteTokenIdRoute,
   MyTreeIdRoute: MyTreeIdRoute,

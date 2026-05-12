@@ -11,6 +11,7 @@ function RootComponent() {
 
   const isAuthPage =
     matchRoute({ to: "/signIn", fuzzy: true }) ||
+    matchRoute({ to: "/forgotPassword", fuzzy: true }) ||
     matchRoute({ to: "inviteToken", fuzzy: true });
 
   if (isAuthPage) {
