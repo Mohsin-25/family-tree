@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { httpMethods, httpRequest } from "../../../../api/httpRequest";
 import { useAppToast } from "../../../../components/Toast";
 
-export const useGetSignin = ({ setIsLogin }: { setIsLogin?: any }) => {
+export const useGetSignin = ({ setForm }: { setForm?: any }) => {
   const { showToast } = useAppToast();
   const { mutate, isPending, reset } = useMutation({
     mutationFn: (payload: { userName: string; password: string }) => {
@@ -20,7 +20,7 @@ export const useGetSignin = ({ setIsLogin }: { setIsLogin?: any }) => {
       });
       if (res?.status) {
         setTimeout(() => {
-          setIsLogin(true);
+          setForm({ type: "login" });
         }, 1500);
       } else {
         reset();
