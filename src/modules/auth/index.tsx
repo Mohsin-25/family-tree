@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import Login from "./logIn";
-import Signin from "./signIn";
+// import Login from "./logIn";
+// import Signin from "./signIn";
 import Background from "../../assets/tree-branches-background.png";
 import { Button } from "../../components/ui/button";
 
@@ -20,7 +20,7 @@ const AuthPage = () => {
       />
       <div className="relative h-[500px] w-[800px] rounded-xl overflow-hidden border backdrop-filter backdrop-blur-sm bg-opacity-10">
         <Separator isLogin={isLogin} setIsLogin={setIsLogin} />
-        {isLogin ? <Login /> : <Signin setIsLogin={setIsLogin} />}
+        {/* {isLogin ? <Login /> : <Signin setIsLogin={setIsLogin} />} */}
       </div>
     </div>
   );
