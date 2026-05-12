@@ -1,29 +1,20 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { Input } from "../../../../components/ui/input";
-import { allowOnlyMentionedRegex } from "../../../../lib/helperFunctions";
 import { Button } from "../../../../components/ui/button";
-import { useGetVerificationCode } from "../services/service";
+import { useChangePassword } from "../services/service";
 
-const ForgotPasswordForm = ({ setForm }: any) => {
+const NewPasswordForm = ({ form }: any) => {
   const methods = useForm();
 
-  const { mutate, isPending } = useGetVerificationCode({ setForm });
+  const { mutate, isPending } = useChangePassword();
 
   const onSubmit = () => {
     const data = methods.getValues();
-    const payload = {
-      userName: data?.userName || undefined,
-      email: data?.email || undefined,
-    };
 
-    setForm((prev: any) => ({
-      ...prev,
-      data: {
-        ...prev.data,
-        userName: data?.userName,
-        email: data?.email,
-      },
-    }));
+    const payload = {
+      password: data?.password,
+      userName: form?.data?.userName || "",
+    };
 
     mutate(payload);
   };
@@ -34,43 +25,34 @@ const ForgotPasswordForm = ({ setForm }: any) => {
         <div className="relative flex flex-col gap-3">
           <div className="grid gap-1">
             <label
-              htmlFor="userName"
+              htmlFor="password"
               className="w-min whitespace-nowrap rounded text-sm"
             >
-              Username
+              New password
             </label>
             <Input
-              id="userName"
+              id="password"
               type="text"
-              placeholder="Enter username"
+              placeholder="Enter password"
               required
               className="ring-0! !focus:ring-0 outline-none! !focus:outline-none"
-              {...methods.register("userName")}
-              onInput={allowOnlyMentionedRegex(/[a-zA-Z0-9-_]/)}
-              disabled={!!methods.watch("email")}
+              {...methods.register("password")}
             />
           </div>
-
-          <div className="absolute top-[70px] left-[50%] right-[50%] flex justify-center -mb-6">
-            <span className="text-sm font-bold">OR</span>
-          </div>
-
           <div className="grid gap-1">
             <label
-              htmlFor="email"
+              htmlFor="password"
               className="w-min whitespace-nowrap rounded text-sm"
             >
-              Email
+              Confirm password
             </label>
             <Input
-              id="email"
+              id="confirmPassword"
               type="text"
-              placeholder="Enter email"
+              placeholder="Enter password again"
               required
               className="ring-0! !focus:ring-0 outline-none! !focus:outline-none"
-              {...methods.register("email")}
-              onInput={allowOnlyMentionedRegex(/[a-zA-Z0-9-_]/)}
-              disabled={!!methods.watch("userName")}
+              {...methods.register("confirmPassword")}
             />
           </div>
           <div className="flex justify-center mt-4">
@@ -79,8 +61,11 @@ const ForgotPasswordForm = ({ setForm }: any) => {
               variant="secondary"
               loading={isPending}
               className="w-full"
+              disabled={
+                methods.watch("password") !== methods.watch("confirmPassword")
+              }
             >
-              {"Send Code"}
+              {"Save New Password"}
             </Button>
           </div>
         </div>
@@ -89,4 +74,4 @@ const ForgotPasswordForm = ({ setForm }: any) => {
   );
 };
 
-export default ForgotPasswordForm;
+export default NewPasswordForm;
