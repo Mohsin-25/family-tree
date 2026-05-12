@@ -70,7 +70,7 @@ const NewLoginForm = ({ form, setForm }: { form?: any; setForm?: any }) => {
                   className="w-min whitespace-nowrap rounded text-sm"
                 >
                   Email ID{" "}
-                  <span className="text-[10px] text-blue-500 font-semibold">
+                  <span className="text-[10px] text-blue-500 ">
                     (For account recovery)
                   </span>
                 </label>
@@ -93,9 +93,7 @@ const NewLoginForm = ({ form, setForm }: { form?: any; setForm?: any }) => {
             >
               Username{" "}
               {isSignin && (
-                <span className="text-[10px] text-blue-500 font-semibold">
-                  (For login)
-                </span>
+                <span className="text-[10px] text-blue-500 ">(For login)</span>
               )}
             </label>
             <Input

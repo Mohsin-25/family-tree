@@ -115,7 +115,7 @@ const TestSix = ({
     : {};
 
   return (
-    <div className="bg-background-100 h-[calc(100vh-65px)] " id="">
+    <div className="h-[calc(100vh-65px)] " id="">
       <Tree
         data={structuredData}
         collapsible={true}
