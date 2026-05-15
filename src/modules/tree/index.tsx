@@ -4,7 +4,9 @@ import {
   Crown,
   Handshake,
   Link,
+  Logs,
   Plus,
+  ScrollText,
   UserRoundCheck,
   UserX,
 } from "lucide-react";
@@ -16,6 +18,7 @@ import { getFamilyTree, useMarkAsRootPerson } from "./services/service";
 import LinkMemberForm from "./components/LinkMemberForm";
 import { Spinner, Theme } from "@radix-ui/themes";
 import CollabForm from "../collaboration/components/CollabForm";
+import ActivityLog from "../activityLog";
 
 const MyTree = () => {
   const [popup, setPopup] = useState({ data: {}, state: false, form: "" });
@@ -39,6 +42,8 @@ const MyTree = () => {
       <LinkMember setPopup={setPopup} popup={popup} />
 
       <Collab setPopup={setPopup} popup={popup} />
+
+      <Activities setPopup={setPopup} popup={popup} />
     </div>
   );
 };
@@ -248,6 +253,36 @@ const Collab = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
         className="max-w-[800px]!"
       >
         <CollabForm popup={popup} setPopup={setPopup} />
+      </PopupWrapper>
+    </>
+  );
+};
+
+const Activities = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
+  return (
+    <>
+      <ScrollText
+        size={40}
+        className="fixed bg-secondary text-white rounded-full top-20 right-5 p-1.5 cursor-pointer"
+        onClick={() => setPopup({ data: {}, state: true, form: "activityLog" })}
+      />
+      <PopupWrapper
+        open={popup?.state && popup?.form === "activityLog"}
+        onOpenChange={() => setPopup({ data: {}, state: false })}
+        className="
+    left-auto!
+    right-0!
+    top-0!
+    translate-x-0!
+    translate-y-0!
+    h-screen!
+    max-h-screen!
+    w-[650px]!
+    max-w-[650px]!
+    overflow-y-auto
+    "
+      >
+        <ActivityLog />
       </PopupWrapper>
     </>
   );
