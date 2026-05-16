@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
-import { User } from "lucide-react";
 
-const ActivityCard = ({ item, index }: any) => {
+const ActivityCard = ({ item, index, isActivityDoneByLoggedInUser }: any) => {
   const activityMapping: any = {
     PERSON_UPDATED: "updated",
     PERSON_CREATED: "added",
@@ -37,14 +36,6 @@ const ActivityCard = ({ item, index }: any) => {
     return value;
   };
 
-  const getInitials = (name = "") => {
-    return name
-      .trim()
-      .split(/\s+/)
-      .map((word) => word[0]?.toUpperCase())
-      .join(" ");
-  };
-
   const changes = (arr) => {
     return arr
       ?.filter((it) => it?.field !== "updatedBy")
@@ -68,6 +59,12 @@ const ActivityCard = ({ item, index }: any) => {
       });
   };
 
+  const getInitials = (name = "") => {
+    return name.trim().split(/\s+/)?.[0]?.[0]?.toUpperCase();
+    // .map((word) => word[0]?.toUpperCase())
+    // .join(" ");
+  };
+
   const summary = item?.summary
     ?.replace(item?.userName, "")
     ?.replaceAll("updatedBy,", "")
@@ -77,23 +74,27 @@ const ActivityCard = ({ item, index }: any) => {
   const finalSummary = summary?.charAt(0)?.toUpperCase() + summary?.slice(1);
 
   return (
-    <div key={index} className="flex gap-3 text-sm border rounded-md p-3">
-      <div className="flex text-[12px] font-semibold w-10 h-10 items-center justify-center p-1 rounded-full bg-blue-300 text-white">
-        {/* <User /> */}
+    <div
+      key={index}
+      className={`flex ${isActivityDoneByLoggedInUser ? "flex-row-reverse" : "flex-row"} gap-3 text-sm border rounded-md p-3`}
+    >
+      <div className="flex text-[12px] shrink-0 font-semibold size-7 items-center justify-center rounded-full bg-blue-400 text-white">
         {getInitials(item?.userName)}
       </div>
-      <div className="flex flex-col w-full">
-        <div className="flex justify-between align-middle">
+      <div className={`flex flex-col w-full`}>
+        <div
+          className={`flex ${isActivityDoneByLoggedInUser ? "flex-row-reverse" : "flex-row"} justify-between align-middle`}
+        >
           <span>
             <span className="font-semibold">{item?.userName}</span>{" "}
           </span>
           <span className="text-[12px] text-gray-400">
-            {dayjs(item?.updatedAt).format("DD-MMM-YYYY | hh:mm a") ||
-              dayjs(item?.createdAt).format("DD-MMM-YYYY | hh:mm a")}
+            {dayjs(item?.updatedAt).format("hh:mm A") ||
+              dayjs(item?.createdAt).format("hh:mm A")}
           </span>
         </div>
         <p>
-          <span className="text-gray-600">{finalSummary}.</span>
+          <span className="">{finalSummary}.</span>
         </p>
       </div>
     </div>

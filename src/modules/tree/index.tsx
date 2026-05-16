@@ -277,8 +277,8 @@ const Activities = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
     translate-y-0!
     h-screen!
     max-h-screen!
-    w-[650px]!
-    max-w-[650px]!
+    w-[500px]!
+    max-w-[500px]!
     overflow-y-auto
     "
       >
