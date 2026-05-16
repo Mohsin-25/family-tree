@@ -17,8 +17,8 @@ interface httpRequestProps<T, U> {
 }
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api/",
-  // "https://family-tree-backend-wj7l.onrender.com/api/",
+  // baseURL: "http://localhost:5000/api/",
+  baseURL: "https://family-tree-backend-wj7l.onrender.com/api/",
   headers: {
     Accept: "application/json, text/plain",
   },
