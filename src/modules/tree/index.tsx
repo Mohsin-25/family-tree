@@ -4,7 +4,6 @@ import {
   Crown,
   Handshake,
   Link,
-  Logs,
   Plus,
   ScrollText,
   UserRoundCheck,
