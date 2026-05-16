@@ -277,9 +277,11 @@ const Activities = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
     translate-y-0!
     h-screen!
     max-h-screen!
-    w-[500px]!
-    max-w-[500px]!
+    w-[600px]!
+    max-w-[600px]!
     overflow-y-auto
+    rounded-tr-none
+    rounded-br-none
     "
       >
         <ActivityLog />

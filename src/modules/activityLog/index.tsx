@@ -10,8 +10,19 @@ const ActivityLog = () => {
 
   const { activityLog } = useGetActivityLog(id);
 
-  const groupedActivities = Object.groupBy(activityLog || [], ({ createdAt }) =>
-    dayjs(createdAt).format("DD MMMM YYYY"),
+  const groupedActivities: Record<string, any[]> = (activityLog || []).reduce(
+    (acc: any, activity: any) => {
+      const key = dayjs(activity.createdAt).format("DD MMMM YYYY");
+
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+
+      acc[key].push(activity);
+
+      return acc;
+    },
+    {} as Record<string, any[]>,
   );
 
   return (
@@ -23,40 +34,49 @@ const ActivityLog = () => {
 
       <hr className="text-gray-300 w-[calc(100%+40px)] -ml-5" />
 
-      {Object.entries(groupedActivities)?.map(([key, value], index) => {
-        const parsedDate = dayjs(key);
+      <div>
+        {Object.entries(groupedActivities).map(([key, value], index) => {
+          const parsedDate = dayjs(key);
 
-        const date = parsedDate.isSame(dayjs(), "day")
-          ? "Today"
-          : parsedDate.isSame(dayjs().subtract(1, "day"), "day")
-            ? "Yesterday"
-            : key;
+          const date = parsedDate.isSame(dayjs(), "day")
+            ? "Today"
+            : parsedDate.isSame(dayjs().subtract(1, "day"), "day")
+              ? "Yesterday"
+              : key;
 
-        return (
-          <div className="relative">
-            <div className="flex w-full">
-              <span className="flex items-center justify-center gap-1 ml-auto mr-auto text-gray-600 text-[12px] bg-[#e5e5e5] py-1 px-2 rounded-sm">
-                <CalendarDays size={14} /> {date}
-              </span>
+          return (
+            <div key={key} className="relative">
+              <div className="flex w-full">
+                <span className="flex items-center justify-center gap-1 ml-auto mr-auto text-gray-600 text-[12px] bg-[#e5e5e5] py-1 px-2 rounded-sm">
+                  <CalendarDays size={14} /> {date}
+                </span>
+              </div>
+
+              {value.map((itm: any, idx: number) => {
+                const isActivityDoneByLoggedInUser =
+                  itm?.userName === localStorage.getItem("fullName");
+
+                return (
+                  <div
+                    key={itm?._id || idx}
+                    className={`my-4 max-w-[85%] ${
+                      isActivityDoneByLoggedInUser ? "ml-auto" : "mr-auto"
+                    }`}
+                  >
+                    <ActivityCard
+                      item={itm}
+                      index={index + idx}
+                      isActivityDoneByLoggedInUser={
+                        isActivityDoneByLoggedInUser
+                      }
+                    />
+                  </div>
+                );
+              })}
             </div>
-            {(value || [])?.map((itm, idx) => {
-              const isActivityDoneByLoggedInUser =
-                itm?.userName === localStorage.getItem("fullName");
-              return (
-                <div
-                  className={`my-2 !min-w-[80%] !max-w-[90%] ${isActivityDoneByLoggedInUser ? "ml-auto" : "mr-auto"}`}
-                >
-                  <ActivityCard
-                    item={itm}
-                    index={index + idx}
-                    isActivityDoneByLoggedInUser={isActivityDoneByLoggedInUser}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </Card>
   );
 };

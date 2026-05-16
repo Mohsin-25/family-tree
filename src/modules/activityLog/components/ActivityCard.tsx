@@ -1,63 +1,63 @@
 import dayjs from "dayjs";
 
 const ActivityCard = ({ item, index, isActivityDoneByLoggedInUser }: any) => {
-  const activityMapping: any = {
-    PERSON_UPDATED: "updated",
-    PERSON_CREATED: "added",
-    TREE_CREATED: "created",
-  };
+  // const activityMapping: any = {
+  //   PERSON_UPDATED: "updated",
+  //   PERSON_CREATED: "added",
+  //   TREE_CREATED: "created",
+  // };
 
-  const fieldMapping: any = {
-    fields: {
-      maritalStatus: "marital status",
-      profession: "about section",
-    },
+  // const fieldMapping: any = {
+  //   fields: {
+  //     maritalStatus: "marital status",
+  //     profession: "about section",
+  //   },
 
-    gender: {
-      M: "Male",
-      F: "Female",
-    },
+  //   gender: {
+  //     M: "Male",
+  //     F: "Female",
+  //   },
 
-    maritalStatus: {
-      S: "Single",
-      M: "Married",
-    },
-  };
+  //   maritalStatus: {
+  //     S: "Single",
+  //     M: "Married",
+  //   },
+  // };
 
-  const getMappedValue = (field: string, value: string) => {
-    if (field === "gender") {
-      return fieldMapping.gender?.[value] || value;
-    }
+  // const getMappedValue = (field: string, value: string) => {
+  //   if (field === "gender") {
+  //     return fieldMapping.gender?.[value] || value;
+  //   }
 
-    if (field === "maritalStatus") {
-      return fieldMapping.maritalStatus?.[value] || value;
-    }
+  //   if (field === "maritalStatus") {
+  //     return fieldMapping.maritalStatus?.[value] || value;
+  //   }
 
-    return value;
-  };
+  //   return value;
+  // };
 
-  const changes = (arr) => {
-    return arr
-      ?.filter((it) => it?.field !== "updatedBy")
-      .map((itm) => {
-        const label = fieldMapping.fields?.[itm?.field] || itm?.field;
+  // const changes = (arr) => {
+  //   return arr
+  //     ?.filter((it) => it?.field !== "updatedBy")
+  //     .map((itm) => {
+  //       const label = fieldMapping.fields?.[itm?.field] || itm?.field;
 
-        return itm?.field === "photo"
-          ? !itm?.oldValue?.url
-            ? `Added ${label}`
-            : !itm?.newValue?.url
-              ? `Removed ${label}`
-              : `Changed ${label}`
-          : !itm?.oldValue
-            ? `Added ${label} ${getMappedValue(itm?.field, itm?.newValue)}`
-            : !itm?.newValue
-              ? `Removed ${label}`
-              : `Changed ${label} from ${getMappedValue(
-                  itm?.field,
-                  itm?.oldValue,
-                )} to ${getMappedValue(itm?.field, itm?.newValue)}`;
-      });
-  };
+  //       return itm?.field === "photo"
+  //         ? !itm?.oldValue?.url
+  //           ? `Added ${label}`
+  //           : !itm?.newValue?.url
+  //             ? `Removed ${label}`
+  //             : `Changed ${label}`
+  //         : !itm?.oldValue
+  //           ? `Added ${label} ${getMappedValue(itm?.field, itm?.newValue)}`
+  //           : !itm?.newValue
+  //             ? `Removed ${label}`
+  //             : `Changed ${label} from ${getMappedValue(
+  //                 itm?.field,
+  //                 itm?.oldValue,
+  //               )} to ${getMappedValue(itm?.field, itm?.newValue)}`;
+  //     });
+  // };
 
   const getInitials = (name = "") => {
     return name.trim().split(/\s+/)?.[0]?.[0]?.toUpperCase();
@@ -73,27 +73,59 @@ const ActivityCard = ({ item, index, isActivityDoneByLoggedInUser }: any) => {
 
   const finalSummary = summary?.charAt(0)?.toUpperCase() + summary?.slice(1);
 
+  const ChatArrow = ({ className }: any) => {
+    return (
+      <div className={className}>
+        <div
+          className="w-0 h-0 
+        border-l-20 border-l-transparent
+            border-t-12 border-t-[#e5e5e5]
+            absolute -left-5 -top-px"
+        ></div>
+        <div
+          className="w-0 h-0 
+        border-l-20 border-l-transparent
+        border-t-12 border-t-white
+        absolute -left-[17.5px] top-0"
+        ></div>
+      </div>
+    );
+  };
+
   return (
     <div
       key={index}
-      className={`flex ${isActivityDoneByLoggedInUser ? "flex-row-reverse" : "flex-row"} gap-3 text-sm border rounded-md p-3`}
+      className={`relative flex text-sm border rounded-md px-3 py-2 ${isActivityDoneByLoggedInUser ? "flex-row-reverse mr-6 rounded-tr-none" : "flex-row ml-6 rounded-tl-none"}`}
     >
-      <div className="flex text-[12px] shrink-0 font-semibold size-7 items-center justify-center rounded-full bg-blue-400 text-white">
+      <div
+        className={`absolute top-2.5 flex text-[12px] shrink-0 size-7 items-center justify-center rounded-full bg-[#e5e5e5] text-gray-600  ${isActivityDoneByLoggedInUser ? "-right-9 " : "-left-9 "}`}
+      >
         {getInitials(item?.userName)}
       </div>
-      <div className={`flex flex-col w-full`}>
+
+      <ChatArrow
+        className={
+          isActivityDoneByLoggedInUser
+            ? "scale-x-[-1] absolute top-0 right-0"
+            : ""
+        }
+      />
+
+      <div className={`flex gap-1 flex-col w-full`}>
         <div
           className={`flex ${isActivityDoneByLoggedInUser ? "flex-row-reverse" : "flex-row"} justify-between align-middle`}
         >
           <span>
             <span className="font-semibold">{item?.userName}</span>{" "}
           </span>
-          <span className="text-[12px] text-gray-400">
+          <span className="text-[12px] text-gray-500">
             {dayjs(item?.updatedAt).format("hh:mm A") ||
               dayjs(item?.createdAt).format("hh:mm A")}
           </span>
         </div>
-        <p>
+        <p
+          className={`${isActivityDoneByLoggedInUser ? "text-right" : "text-left"}`}
+        >
           <span className="">{finalSummary}.</span>
         </p>
       </div>
