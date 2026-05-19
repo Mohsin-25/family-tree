@@ -25,24 +25,59 @@ const MyTree = () => {
 
   const { treeData } = getFamilyTree(id);
 
-  const treeRole = localStorage.getItem("treeRole");
-
-  const isOwner = treeRole === "OWNER";
-  const isEditor = treeRole === "EDITOR";
+  const isOwner = treeData?.member?.role === "OWNER";
+  const isEditor = treeData?.member?.role === "EDITOR";
 
   return (
     <div>
       <FamilyTree setPopup={setPopup} popup={popup} />
 
-      <MemberCountStatus treeData={treeData} setPopup={setPopup} />
+      <div className="flex flex-col fixed bottom-5 right-5 gap-5 items-end text-[12px]">
+        {(isOwner || isEditor) && (
+          <div
+            className="flex items-center gap-3 group cursor-pointer"
+            onClick={() =>
+              setPopup({ data: {}, state: true, form: "addMember" })
+            }
+          >
+            <span className="group-hover:font-bold transition-all">
+              Add person
+            </span>
+            <Plus
+              size={40}
+              className="bg-secondary text-white rounded-full p-[7px] group-hover:bg-secondary/90 group-hover:p-[6px] transition-all"
+            />
+          </div>
+        )}
+        <div
+          className="flex items-center gap-3 group cursor-pointer"
+          onClick={() => setPopup({ data: {}, state: true, form: "collab" })}
+        >
+          <span className="group-hover:font-bold transition-all">
+            Invite / manage members
+          </span>
+          <Handshake
+            size={40}
+            className="border-1 border-secondary shadow-lg rounded-full text-secondary rounded-full p-[7px] group-hover:bg-secondary/5 group-hover:p-[6px] transition-all"
+          />
+        </div>
+        <div
+          className="flex items-center gap-3 group"
+          onClick={() =>
+            setPopup({ data: {}, state: true, form: "activityLog" })
+          }
+        >
+          <span className="group-hover:font-bold transition-all cursor-pointer">
+            Activity logs
+          </span>
+          <ScrollText
+            size={40}
+            className="border-1 border-secondary shadow-lg rounded-full text-secondary rounded-full p-[7px] group-hover:bg-secondary/5 group-hover:p-[6px] transition-all"
+          />
+        </div>
+      </div>
 
-      {(isOwner || isEditor) && <AddMember setPopup={setPopup} />}
-
-      <LinkMember setPopup={setPopup} popup={popup} />
-
-      <Collab setPopup={setPopup} popup={popup} />
-
-      <Activities setPopup={setPopup} popup={popup} />
+      <Popups treeData={treeData} setPopup={setPopup} popup={popup} />
     </div>
   );
 };
@@ -53,7 +88,21 @@ const FamilyTree = ({ setPopup, popup }: { setPopup?: any; popup?: any }) => {
   return (
     <>
       <TestSix setPopup={setPopup} popup={popup} />
+    </>
+  );
+};
 
+const Popups = ({
+  setPopup,
+  popup,
+  treeData,
+}: {
+  setPopup?: any;
+  popup?: any;
+  treeData?: any;
+}) => {
+  return (
+    <>
       <PopupWrapper
         open={
           popup?.state &&
@@ -63,18 +112,30 @@ const FamilyTree = ({ setPopup, popup }: { setPopup?: any; popup?: any }) => {
       >
         <AddMemberForm popup={popup} setPopup={setPopup} />
       </PopupWrapper>
-    </>
-  );
-};
 
-const LinkMember = ({ setPopup, popup }: { setPopup?: any; popup?: any }) => {
-  return (
-    <>
+      <MemberCountStatus treeData={treeData} setPopup={setPopup} />
+
       <PopupWrapper
         open={popup?.state && popup?.form === "linkMember"}
         onOpenChange={() => setPopup({ data: {}, state: false })}
       >
         <LinkMemberForm popup={popup} setPopup={setPopup} />
+      </PopupWrapper>
+
+      <PopupWrapper
+        open={popup?.state && popup?.form === "collab"}
+        onOpenChange={() => setPopup({ data: {}, state: false })}
+        className="max-w-[800px]!"
+      >
+        <CollabForm popup={popup} setPopup={setPopup} />
+      </PopupWrapper>
+
+      <PopupWrapper
+        open={popup?.state && popup?.form === "activityLog"}
+        onOpenChange={() => setPopup({ data: {}, state: false })}
+        className="left-auto! right-0! top-0! translate-x-0! translate-y-0! h-screen! max-h-screen! w-[600px]! max-w-[600px]! overflow-y-auto rounded-tr-none rounded-br-none"
+      >
+        <ActivityLog />
       </PopupWrapper>
     </>
   );
@@ -225,66 +286,5 @@ const MemberCountStatus = ({
         </Menubar.Menu>
       </div>
     </Menubar.Root>
-  );
-};
-
-const AddMember = ({ setPopup }: { setPopup: any }) => {
-  return (
-    <Plus
-      size={40}
-      className="fixed bg-secondary text-white rounded-full bottom-5 right-5 p-1 cursor-pointer"
-      onClick={() => setPopup({ data: {}, state: true, form: "addMember" })}
-    />
-  );
-};
-
-const Collab = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
-  return (
-    <>
-      <Handshake
-        size={40}
-        className="fixed bg-secondary text-white rounded-full bottom-5 left-5 p-1 cursor-pointer"
-        onClick={() => setPopup({ data: {}, state: true, form: "collab" })}
-      />
-      <PopupWrapper
-        open={popup?.state && popup?.form === "collab"}
-        onOpenChange={() => setPopup({ data: {}, state: false })}
-        className="max-w-[800px]!"
-      >
-        <CollabForm popup={popup} setPopup={setPopup} />
-      </PopupWrapper>
-    </>
-  );
-};
-
-const Activities = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
-  return (
-    <>
-      <ScrollText
-        size={40}
-        className="fixed bg-secondary text-white rounded-full top-20 right-5 p-1.5 cursor-pointer"
-        onClick={() => setPopup({ data: {}, state: true, form: "activityLog" })}
-      />
-      <PopupWrapper
-        open={popup?.state && popup?.form === "activityLog"}
-        onOpenChange={() => setPopup({ data: {}, state: false })}
-        className="
-    left-auto!
-    right-0!
-    top-0!
-    translate-x-0!
-    translate-y-0!
-    h-screen!
-    max-h-screen!
-    w-[600px]!
-    max-w-[600px]!
-    overflow-y-auto
-    rounded-tr-none
-    rounded-br-none
-    "
-      >
-        <ActivityLog />
-      </PopupWrapper>
-    </>
   );
 };

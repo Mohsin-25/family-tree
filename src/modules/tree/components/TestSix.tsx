@@ -8,7 +8,6 @@ import { Spinner } from "@radix-ui/themes";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAppToast } from "../../../components/Toast";
 import LazyLoader from "../../../components/ui/Loader";
-import { useEffect } from "react";
 
 type FamilyNode = RawNodeDatum & {
   type: "single" | "couple";
@@ -44,12 +43,7 @@ const TestSix = ({
     isFetching,
   } = getFamilyTree(id);
 
-  const treeRole = localStorage.getItem("treeRole");
-
-  useEffect(() => {
-    if (treeData?.member?.role && treeData?.member?.role !== treeRole)
-      localStorage.setItem("treeRole", treeData?.member?.role);
-  }, [treeData?.member?.role]);
+  const treeRole = treeData?.member?.role;
 
   if (isTreeDataLoading) {
     return (
@@ -148,12 +142,14 @@ const TestSix = ({
                     person={person}
                     spouse={spouse}
                     setPopup={setPopup}
+                    treeRole={treeRole}
                   />
                 ) : (
                   <SingleNode
                     allData={nodeDatum.attributes}
                     person={person}
                     setPopup={setPopup}
+                    treeRole={treeRole}
                   />
                 )}
               </div>
@@ -173,6 +169,7 @@ const CoupleNode = ({
   person,
   spouse,
   setPopup,
+  treeRole,
 }: // popup,
 // setPopover,
 {
@@ -182,11 +179,17 @@ const CoupleNode = ({
   setPopup?: any;
   popup?: any;
   setPopover?: any;
+  treeRole?: any;
 }) => {
   return (
     <div className="flex items-center justify-between rounded-xl cursor-pointer">
       {/* person */}
-      <SingleNode allData={allData} person={person} setPopup={setPopup} />
+      <SingleNode
+        allData={allData}
+        person={person}
+        treeRole={treeRole}
+        setPopup={setPopup}
+      />
 
       <div className="h-0.5 w-[100px] mt-0 bg-black/50 rounded-full"></div>
 
@@ -195,6 +198,7 @@ const CoupleNode = ({
         allData={allData}
         person={spouse}
         setPopup={setPopup}
+        treeRole={treeRole}
         isSpouse
       />
     </div>
@@ -205,6 +209,7 @@ const SingleNode = ({
   person,
   isSpouse = false,
   setPopup,
+  treeRole,
 }: // popup,
 {
   allData: any;
@@ -212,6 +217,7 @@ const SingleNode = ({
   isSpouse?: any;
   setPopup?: any;
   popup?: any;
+  treeRole?: any;
 }) => {
   const {
     mutate: markAsRootPersonMutation,
@@ -235,8 +241,6 @@ const SingleNode = ({
       return newData;
     });
   };
-
-  const treeRole = localStorage.getItem("treeRole");
 
   const isOwner = treeRole === "OWNER";
   const isEditor = treeRole === "EDITOR";
