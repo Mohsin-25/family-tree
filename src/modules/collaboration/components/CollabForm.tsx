@@ -179,8 +179,7 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
                 <Table.Body className="">
                   {members?.map((item: any, index: any) => {
                     const isLoggedInUser =
-                      localStorage.getItem("fullName") ==
-                      item?.userId?.fullName;
+                      localStorage.getItem("id") == item?.userId?._id;
 
                     const isMemberOwner = item?.role === "OWNER";
                     const isMemberEditor = item?.role === "EDITOR";

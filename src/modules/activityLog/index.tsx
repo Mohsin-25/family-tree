@@ -54,7 +54,7 @@ const ActivityLog = () => {
 
               {value.map((itm: any, idx: number) => {
                 const isActivityDoneByLoggedInUser =
-                  itm?.userName === localStorage.getItem("fullName");
+                  itm?.userId === localStorage.getItem("id");
 
                 return (
                   <div

@@ -25,6 +25,7 @@ export const useGetLoggedin = () => {
         setTimeout(() => {
           localStorage.setItem("token", res?.data?.token);
           localStorage.setItem("fullName", res?.data?.user?.fullName);
+          localStorage.setItem("id", res?.data?.user?.id);
           window.location.href = redirectTo ? redirectTo : "/dashboard";
         }, 1500);
       } else {
