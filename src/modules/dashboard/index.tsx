@@ -2,7 +2,7 @@ import GroupTrees from "./components/GroupTrees";
 
 const Dashboard = () => {
   return (
-    <div className="p-8">
+    <div className="p-8 text-white">
       <div className="mb-8">
         <p className="text-2xl font-semibold">Your Family Trees</p>
         <p className="">

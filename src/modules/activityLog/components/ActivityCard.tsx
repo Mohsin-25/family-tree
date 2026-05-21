@@ -85,7 +85,7 @@ const ActivityCard = ({ item, index, isActivityDoneByLoggedInUser }: any) => {
         <div
           className="w-0 h-0 
         border-l-20 border-l-transparent
-        border-t-12 border-t-white
+        border-t-12 border-t-transparent
         absolute -left-[17.5px] top-0"
         ></div>
       </div>
@@ -95,7 +95,7 @@ const ActivityCard = ({ item, index, isActivityDoneByLoggedInUser }: any) => {
   return (
     <div
       key={index}
-      className={`relative flex text-sm border rounded-md px-3 py-2 ${isActivityDoneByLoggedInUser ? "flex-row-reverse mr-6 rounded-tr-none" : "flex-row ml-6 rounded-tl-none"}`}
+      className={`relative text-white flex text-sm border rounded-md px-3 py-2 ${isActivityDoneByLoggedInUser ? "flex-row-reverse mr-6 rounded-tr-none" : "flex-row ml-6 rounded-tl-none"}`}
     >
       <div
         className={`absolute top-2.5 flex text-[12px] shrink-0 size-7 items-center justify-center rounded-full bg-[#e5e5e5] text-gray-600  ${isActivityDoneByLoggedInUser ? "-right-9 " : "-left-9 "}`}

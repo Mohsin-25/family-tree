@@ -31,7 +31,7 @@ const TreeCard = ({ item }: { item: any }) => {
   const isViewer = item?.role === "VIEWER";
 
   return (
-    <div className="bg-white flex flex-col overflow-hidden w-[280px] min-h-[380px] border border-extraLightGray rounded-lg shadow-lg group">
+    <div className="bg-white/20 hover:bg-white/30 flex flex-col overflow-hidden w-[280px] min-h-[380px] rounded-lg shadow-lg group backdrop-filter backdrop-blur-[2px] bg-opacity-10">
       <div className="flex flex-col relative">
         <img
           src={
@@ -51,12 +51,12 @@ const TreeCard = ({ item }: { item: any }) => {
             {isEditor && <UserPen size={16} className="text-black" />}
           </span>
         </div>{" "}
-        <span className="absolute bottom-3 left-3 text-white font-bold text-2xl">
+        <span className="absolute bottom-3 left-3 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] font-bold text-2xl">
           {item?.title}
         </span>
       </div>
 
-      <div className="p-4 flex flex-col gap-4">
+      <div className="p-4 flex flex-col gap-4 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
         <span className="text-sm">{item?.description}</span>
         {/* <div className="flex">
           <span className="flex gap-2 items-center">
@@ -76,22 +76,20 @@ const TreeCard = ({ item }: { item: any }) => {
         </div>{" "} */}
         <div className="flex justify-between">
           <span className="flex gap-2 items-center">
-            <Users size={16} className="text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
-              {item?.memberCount} members
-            </span>
+            <Users size={16} className="" />
+            <span className="text-sm ">{item?.memberCount} members</span>
           </span>
           <span className="flex gap-2 items-center">
-            <Trees size={16} className="text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
+            <Trees size={16} className="" />
+            <span className="text-sm ">
               {item?.generations || 5} generations
             </span>
           </span>
         </div>
         <div className="flex">
           <span className="flex gap-2 items-center">
-            <CalendarDays size={16} className="text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
+            <CalendarDays size={16} className="" />
+            <span className="text-sm ">
               Updated {dayjs(item?.updatedAt).fromNow()}
             </span>
           </span>
@@ -130,15 +128,15 @@ export const EmptyTreeCard = () => {
   return (
     <>
       <div
-        className="p-5 flex flex-col gap-5 w-[280px] min-h-[380px] border border-dashed border-black/50 rounded-lg shadow-lg items-center justify-center hover:border-black/70 cursor-pointer hover:bg-white"
+        className="drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] p-5 flex flex-col gap-5 w-[280px] min-h-[380px] border border-dashed border-black/50 rounded-lg shadow-lg items-center justify-center hover:border-black/70 cursor-pointer bg-white/20 hover:bg-white/30 backdrop-filter backdrop-blur-[2px] bg-opacity-10"
         onClick={() => setPopup(true)}
       >
-        <span className="bg-black/10 rounded-full p-4">
-          <Plus size={30} className="text-muted-foreground" />
+        <span className="bg-black/30 rounded-full p-4">
+          <Plus size={30} className="" />
         </span>
         <div className="flex flex-col text-center">
           <span className="text-md font-semibold">Create New Tree</span>
-          <span className="text-center text-sm text-muted-foreground">
+          <span className="text-center text-sm ">
             Start documenting a new family lineage
           </span>
         </div>
