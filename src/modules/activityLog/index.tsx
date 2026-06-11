@@ -27,7 +27,7 @@ const ActivityLog = () => {
   );
 
   return (
-    <Card className="w-full h-full bg-white p-5 gap-3 relative flex">
+    <Card className="text-white w-full h-full bg-transparent p-5 gap-3 relative flex">
       <p className="font-medium">Activity Logs</p>
       <p className="text-[14px] -mt-2 text-gray-500">
         Track every change, update, and action across your tree.

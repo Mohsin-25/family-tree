@@ -123,6 +123,9 @@ const TestSix = ({
         onNodeClick={() => alert("yeet")}
         separation={{ siblings: 2, nonSiblings: 2 }}
         pathFunc={"step"}
+        pathClassFunc={() => {
+          return "!stroke-white !stroke-[4px]";
+        }}
         onLinkClick={() => alert("yeet")}
         /////////////////////
         renderCustomNodeElement={({ nodeDatum, toggleNode }) => {
@@ -191,7 +194,7 @@ const CoupleNode = ({
         setPopup={setPopup}
       />
 
-      <div className="h-0.5 w-[100px] mt-0 bg-black/50 rounded-full"></div>
+      <div className="h-1 w-[100px] mt-0 bg-white rounded-full"></div>
 
       {/* spouse */}
       <SingleNode
@@ -247,14 +250,14 @@ const SingleNode = ({
 
   return person ? (
     <div
-      className={`relative bg-white group border px-4 py-6 rounded-xl shadow-md flex flex-col items-center justify-center w-[200px] h-[180px] cursor-auto ${
-        isSpouse && "bg-blue-100!"
+      className={`relative bg-white/40 backdrop-filter backdrop-blur-[2px] bg-opacity-10 group px-4 py-6 rounded-xl shadow-md flex flex-col items-center justify-center w-[200px] h-[180px] cursor-auto ${
+        isSpouse && "bg-white/40!"
       }`}
     >
       {(isOwner || isEditor) && (
         <button
           title="Edit Person"
-          className="text-primary/60 hover:text-primary opacity-0 group-hover:opacity-100 items-center justify-center rounded-full absolute right-2 top-2 cursor-pointer transition-all duration-300 ease-in-out"
+          className="text-white hover:text-primary opacity-0 group-hover:opacity-100 items-center justify-center rounded-full absolute right-2 top-2 cursor-pointer transition-all duration-300 ease-in-out"
           onClick={(e) => {
             e.stopPropagation();
             setPopup({ data: person, state: true, form: "editMember" });
@@ -270,7 +273,7 @@ const SingleNode = ({
         }
         className="w-[70px] h-[70px] group-hover:w-[120px] group-hover:h-[120px] rounded-full object-cover mb-1 transition-all duration-300 ease-in-out"
       />
-      <p className="text-sm font-medium">{person?.data?.name}</p>
+      <p className="text-center">{person?.data?.name}</p>
 
       {isSpouse && (person?.data?.father || person?.data?.mother) && (
         <button

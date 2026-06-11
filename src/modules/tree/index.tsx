@@ -32,7 +32,7 @@ const MyTree = () => {
     <div>
       <FamilyTree setPopup={setPopup} popup={popup} />
 
-      <div className="flex flex-col fixed bottom-5 right-5 gap-5 items-end text-[12px]">
+      <div className="text-white flex flex-col fixed bottom-5 right-5 gap-5 items-end text-[12px]">
         {(isOwner || isEditor) && (
           <div
             className="flex items-center gap-3 group cursor-pointer"
@@ -45,7 +45,7 @@ const MyTree = () => {
             </span>
             <Plus
               size={40}
-              className="bg-secondary text-white rounded-full p-[7px] group-hover:bg-secondary/90 group-hover:p-[6px] transition-all"
+              className="bg-white text-secondary rounded-full p-[7px] group-hover:bg-white/90 group-hover:p-[6px] transition-all"
             />
           </div>
         )}
@@ -60,7 +60,7 @@ const MyTree = () => {
           </span>
           <Handshake
             size={40}
-            className="border-1 border-secondary shadow-lg rounded-full text-secondary rounded-full p-[7px] group-hover:bg-secondary/5 group-hover:p-[6px] transition-all"
+            className="border-1 border-white shadow-lg rounded-full text-white rounded-full p-[7px] group-hover:bg-secondary/5 group-hover:p-[6px] transition-all"
           />
         </div>
         <div
@@ -74,7 +74,7 @@ const MyTree = () => {
           </span>
           <ScrollText
             size={40}
-            className="border-1 border-secondary shadow-lg rounded-full text-secondary rounded-full p-[7px] group-hover:bg-secondary/5 group-hover:p-[6px] transition-all"
+            className="border-1 border-white shadow-lg rounded-full text-white rounded-full p-[7px] group-hover:bg-secondary/5 group-hover:p-[6px] transition-all"
           />
         </div>
       </div>
@@ -135,7 +135,7 @@ const Popups = ({
       <PopupWrapper
         open={popup?.state && popup?.form === "activityLog"}
         onOpenChange={() => setPopup({ data: {}, state: false })}
-        className="left-auto! right-0! top-0! translate-x-0! translate-y-0! h-screen! max-h-screen! w-[600px]! max-w-[600px]! overflow-y-auto rounded-tr-none rounded-br-none"
+        className="bg-black! left-auto! right-0! top-0! translate-x-0! translate-y-0! h-screen! max-h-screen! w-[600px]! max-w-[600px]! overflow-y-auto rounded-tr-none rounded-br-none"
       >
         <ActivityLog />
       </PopupWrapper>
