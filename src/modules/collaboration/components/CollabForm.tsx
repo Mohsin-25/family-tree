@@ -77,7 +77,7 @@ const CollabForm = ({ setPopup, popup }: { setPopup: any; popup: any }) => {
     }
   }
 
-  const treeRole = localStorage.getItem("treeRole");
+  const treeRole = popup?.data?.member?.role;
 
   const isOwner = treeRole === "OWNER";
   const isEditor = treeRole === "EDITOR";

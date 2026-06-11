@@ -51,7 +51,9 @@ const MyTree = () => {
         )}
         <div
           className="flex items-center gap-3 group cursor-pointer"
-          onClick={() => setPopup({ data: {}, state: true, form: "collab" })}
+          onClick={() =>
+            setPopup({ data: treeData, state: true, form: "collab" })
+          }
         >
           <span className="group-hover:font-bold transition-all">
             Invite / manage members
@@ -153,7 +155,7 @@ const MemberCountStatus = ({
     isPending: isMarkAsRootPersonPending,
   } = useMarkAsRootPerson();
 
-  const treeRole = localStorage.getItem("treeRole");
+  const treeRole = treeData?.member?.role;
 
   const isOwner = treeRole === "OWNER";
   const isEditor = treeRole === "EDITOR";
